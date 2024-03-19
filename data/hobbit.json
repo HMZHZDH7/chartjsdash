@@ -1,0 +1,470 @@
+{
+    "Age": {
+        "label": "Age",
+        "attribute_type": "Quantitative"
+    },
+    "Gender": {
+        "label": "Gender",
+        "attribute_type": "Categorical"
+    },
+    "NIHSS": {
+        "label": "NIHSS",
+        "attribute_type": "Quantitative"
+    },
+    "BP systolic": {
+        "label": "BP systolic",
+        "attribute_type": "Quantitative"
+    },
+    "BP diastolic": {
+        "label": "BP diastolic",
+        "attribute_type": "Quantitative"
+    },
+    "Glucose": {
+        "label": "Glucose",
+        "attribute_type": "Quantitative"
+    },
+    "LDL cholesterol": {
+        "label": "LDL cholesterol",
+        "attribute_type": "Quantitative"
+    },
+    "mRS 2-5": {
+        "label": "mRS 2-5",
+        "attribute_type": "Categorical"
+    },
+    "COVID positive": {
+        "label": "COVID positive",
+        "attribute_type": "Categorical_binary"
+    },
+    "In-hospital stroke": {
+        "label": "In-hospital stroke",
+        "attribute_type": "Categorical_binary"
+    },
+    "Arrival pre-notified": {
+        "label": "Arrival pre-notified",
+        "attribute_type": "Categorical_binary"
+    },
+    "Hypertension": {
+        "label": "Hypertension",
+        "attribute_type": "Categorical_binary"
+    },
+    "Diabetes": {
+        "label": "Diabetes",
+        "attribute_type": "Categorical_binary"
+    },
+    "Hyperlipidemia": {
+        "label": "Hyperlipidemia",
+        "attribute_type": "Categorical_binary"
+    },
+    "Active smoker": {
+        "label": "Active smoker",
+        "attribute_type": "Categorical_binary"
+    },
+    "Previous IS/TIA": {
+        "label": "Previous IS/TIA",
+        "attribute_type": "Categorical_binary"
+    },
+    "Previous ICH": {
+        "label": "Previous ICH",
+        "attribute_type": "Categorical_binary"
+    },
+    "Cor. Artery Disease / Previous MI": {
+        "label": "Cor. Artery Disease / Previous MI",
+        "attribute_type": "Categorical_binary"
+    },
+    "Cong. Heart Fail": {
+        "label": "Cong. Heart Fail",
+        "attribute_type": "Categorical_binary"
+    },
+    "HIV": {
+        "label": "HIV",
+        "attribute_type": "Categorical_binary"
+    },
+    "Type of stroke": {
+        "label": "Type of stroke",
+        "attribute_type": "Categorical"
+    },
+    "Arrival": {
+        "label": "Arrival",
+        "attribute_type": "Quantitative"
+    },
+    "First received care": {
+        "label": "First received care",
+        "attribute_type": "Quantitative"
+    },
+    "Hospitalized at unit": {
+        "label": "Hospitalized at unit",
+        "attribute_type": "Categorical"
+    },
+    "Hospitalized at department": {
+        "label": "Hospitalized at department",
+        "attribute_type": "Categorical"
+    },
+    "Anti Diabetics": {
+        "label": "Anti Diabetics",
+        "attribute_type": "Categorical_binary"
+    },
+    "Anti Hypertensives": {
+        "label": "Anti Hypertensives",
+        "attribute_type": "Categorical_binary"
+    },
+    "Aspirin (ASA)": {
+        "label": "Aspirin (ASA)",
+        "attribute_type": "Categorical_binary"
+    },
+    "Cilostazol": {
+        "label": "Cilostazol",
+        "attribute_type": "Categorical_binary"
+    },
+    "Clopidogrel": {
+        "label": "Clopidogrel",
+        "attribute_type": "Categorical_binary"
+    },
+    "Ticagrelol": {
+        "label": "Ticagrelol",
+        "attribute_type": "Categorical_binary"
+    },
+    "Ticlopidine": {
+        "label": "Ticlopidine",
+        "attribute_type": "Categorical_binary"
+    },
+    "Prasugrel": {
+        "label": "Prasugrel",
+        "attribute_type": "Categorical_binary"
+    },
+    "Dipyridamol, slow release": {
+        "label": "Dipyridamol, slow release",
+        "attribute_type": "Categorical_binary"
+    },
+    "Warfarin": {
+        "label": "Warfarin",
+        "attribute_type": "Categorical_binary"
+    },
+    "Low molecular weight heparin/heparin": {
+        "label": "Low molecular weight heparin/heparin",
+        "attribute_type": "Categorical_binary"
+    },
+    "Dabigatran": {
+        "label": "Dabigatran",
+        "attribute_type": "Categorical_binary"
+    },
+    "Rivoroxaban": {
+        "label": "Rivoroxaban",
+        "attribute_type": "Categorical_binary"
+    },
+    "Apixaban": {
+        "label": "Apixaban",
+        "attribute_type": "Categorical_binary"
+    },
+    "Edoxaban": {
+        "label": "Edoxaban",
+        "attribute_type": "Categorical_binary"
+    },
+    "Statin": {
+        "label": "Statin",
+        "attribute_type": "Categorical_binary"
+    },
+    "Ischemic stroke etiology": {
+        "label": "Ischemic stroke etiology",
+        "attribute_type": "Categorical"
+    },
+    "Stroke mimics": {
+        "label": "Stroke mimics",
+        "attribute_type": "Categorical"
+    },
+    "ICH volume": {
+        "label": "ICH volume",
+        "attribute_type": "Quantitative"
+    },
+    "Infratentorial bleeding": {
+        "label": "Infratentorial bleeding",
+        "attribute_type": "Categorical_binary"
+    },
+    "Source of bleeding found": {
+        "label": "Source of bleeding found",
+        "attribute_type": "Categorical"
+    },
+    "Intraventricular bleeding": {
+        "label": "Intraventricular bleeding",
+        "attribute_type": "Categorical_binary"
+    },
+    "ICH score": {
+        "label": "ICH score",
+        "attribute_type": "Quantitative"
+    },
+    "Neurosurgery for ICH": {
+        "label": "Neurosurgery for ICH",
+        "attribute_type": "Categorical_binary"
+    },
+    "Neurosurgery for SAH": {
+        "label": "Neurosurgery for SAH",
+        "attribute_type": "Categorical_binary"
+    },
+    "ICH bleeding cause": {
+        "label": "ICH bleeding cause",
+        "attribute_type": "Categorical"
+    },
+    "DVT prevention for ICH": {
+        "label": "DVT prevention for ICH",
+        "attribute_type": "Categorical_binary"
+    },
+    "Hunt-Hess": {
+        "label": "Hunt-Hess",
+        "attribute_type": "Quantitative"
+    },
+    "Imaging modality": {
+        "label": "Imaging modality",
+        "attribute_type": "Categorical"
+    },
+    "Site of occlusion": {
+        "label": "Site of occlusion",
+        "attribute_type": "Categorical"
+    },
+    "Imaging not done at all": {
+        "label": "Imaging not done at all",
+        "attribute_type": "Categorical_binary"
+    },
+    "Imaging done but outside your hospital": {
+        "label": "Imaging done but outside your hospital",
+        "attribute_type": "Categorical_binary"
+    },
+    "Door-to-imaging time": {
+        "label": "Door-to-imaging time",
+        "attribute_type": "Quantitative"
+    },
+    "CT perfusion score": {
+        "label": "CT perfusion score",
+        "attribute_type": "Quantitative"
+    },
+    "CT perfusion hypoperfusion": {
+        "label": "CT perfusion hypoperfusion",
+        "attribute_type": "Quantitative"
+    },
+    "Carotid arteries imaging within 7 days after admission": {
+        "label": "Carotid arteries imaging within 7 days after admission",
+        "attribute_type": "Categorical_binary"
+    },
+    "Symptomatic carotid stenosis > 70%": {
+        "label": "Symptomatic carotid stenosis > 70%",
+        "attribute_type": "Categorical_binary"
+    },
+    "Symptomatic carotid stenosis 50-70%": {
+        "label": "Symptomatic carotid stenosis 50-70%",
+        "attribute_type": "Categorical_binary"
+    },
+    "Number of IVT": {
+        "label": "Number of IVT",
+        "attribute_type": "Quantitative"
+    },
+    "% IVT of all ischemic strokes": {
+        "label": "% IVT of all ischemic strokes",
+        "attribute_type": "Quantitative"
+    },
+    "Onset-to-door time for IVT, median": {
+        "label": "Onset-to-door time for IVT, median",
+        "attribute_type": "Quantitative"
+    },
+    "Door-to-needle for IVT, median": {
+        "label": "Door-to-needle for IVT, median",
+        "attribute_type": "Quantitative"
+    },
+    "% MT only of all ischemic strokes": {
+        "label": "% MT only of all ischemic strokes",
+        "attribute_type": "Quantitative"
+    },
+    "% IVT+MT of all ischemic strokes": {
+        "label": "% IVT+MT of all ischemic strokes",
+        "attribute_type": "Quantitative"
+    },
+    "Door-to-groin for MT, median. Direct (primary transport)": {
+        "label": "Door-to-groin for MT, median. Direct (primary transport)",
+        "attribute_type": "Quantitative"
+    },
+    "Door-to-groin for MT, median. Drip-and-ship (secondary transport)": {
+        "label": "Door-to-groin for MT, median. Drip-and-ship (secondary transport)",
+        "attribute_type": "Quantitative"
+    },
+    "Door-in-door-out, median. For PSC, transport to CSC for MT": {
+        "label": "Door-in-door-out, median. For PSC, transport to CSC for MT",
+        "attribute_type": "Quantitative"
+    },
+    "TICI scores": {
+        "label": "TICI scores",
+        "attribute_type": "Categorical"
+    },
+    "Bleeding after IVT/MT": {
+        "label": "Bleeding after IVT/MT",
+        "attribute_type": "Categorical_binary"
+    },
+    "Complications after MT": {
+        "label": "Complications after MT",
+        "attribute_type": "Categorical_binary"
+    },
+    "DVT prevention": {
+        "label": "DVT prevention",
+        "attribute_type": "Categorical_binary"
+    },
+    "Decompressive hemicraniectomy of patients >60 years and > NIHSS": {
+        "label": "Decompressive hemicraniectomy of patients >60 years and > NIHSS",
+        "attribute_type": "Categorical_binary"
+    },
+    "Carotid artery imaging <= 7 days after admission": {
+        "label": "Carotid artery imaging <= 7 days after admission",
+        "attribute_type": "Categorical_binary"
+    },
+    ">70% internal carotid artery stenosis": {
+        "label": ">70% internal carotid artery stenosis",
+        "attribute_type": "Categorical_binary"
+    },
+    "Carotid endarterectomy of patients with >70% ICA stenosis": {
+        "label": "Carotid endarterectomy of patients with >70% ICA stenosis",
+        "attribute_type": "Categorical_binary"
+    },
+    "Antipyretic administered for the first elevated temperature": {
+        "label": "Antipyretic administered for the first elevated temperature",
+        "attribute_type": "Categorical_binary"
+    },
+    "Was insulin administered for the first elevated glucose (>=10 mmol/L)?": {
+        "label": "Was insulin administered for the first elevated glucose (>=10 mmol/L)?",
+        "attribute_type": "Categorical_binary"
+    },
+    "Dysphagia screening performed before given medication/food orally": {
+        "label": "Dysphagia screening performed before given medication/food orally",
+        "attribute_type": "Categorical_binary"
+    },
+    "Physiotherapy initiated <= 72 hours after admission": {
+        "label": "Physiotherapy initiated <= 72 hours after admission",
+        "attribute_type": "Categorical_binary"
+    },
+    "Patient examined by occupational therapist": {
+        "label": "Patient examined by occupational therapist",
+        "attribute_type": "Categorical_binary"
+    },
+    "Who performed swallowing screen": {
+        "label": "Who performed swallowing screen",
+        "attribute_type": "Categorical"
+    },
+    "Reasons for not providing IVT": {
+        "label": "Reasons for not providing IVT",
+        "attribute_type": "Categorical"
+    },
+    "Test for dysphagia screen": {
+        "label": "Test for dysphagia screen",
+        "attribute_type": "Categorical"
+    },
+    "Anti Diabetics": {
+        "label": "Anti Diabetics",
+        "attribute_type": "Categorical_binary"
+    },
+    "Cilostazol": {
+        "label": "Cilostazol",
+        "attribute_type": "Categorical_binary"
+    },
+    "Clopidogrel": {
+        "label": "Clopidogrel",
+        "attribute_type": "Categorical_binary"
+    },
+    "Ticagrelol": {
+        "label": "Ticagrelol",
+        "attribute_type": "Categorical_binary"
+    },
+    "Ticlopidine": {
+        "label": "Ticlopidine",
+        "attribute_type": "Categorical_binary"
+    },
+    "Prasugrel": {
+        "label": "Prasugrel",
+        "attribute_type": "Categorical_binary"
+    },
+    "Dipyridamol, slow release": {
+        "label": "Dipyridamol, slow release",
+        "attribute_type": "Categorical_binary"
+    },
+    "Warfarin for AF": {
+        "label": "Warfarin for AF",
+        "attribute_type": "Categorical_binary"
+    },
+    "Low molecular weight heparin/heparin for AF": {
+        "label": "Low molecular weight heparin/heparin for AF",
+        "attribute_type": "Categorical_binary"
+    },
+    "Dabigatran for AF": {
+        "label": "Dabigatran for AF",
+        "attribute_type": "Categorical_binary"
+    },
+    "Rivoroxaban for AF": {
+        "label": "Rivoroxaban for AF",
+        "attribute_type": "Categorical_binary"
+    },
+    "Apixaban for AF": {
+        "label": "Apixaban for AF",
+        "attribute_type": "Categorical_binary"
+    },
+    "Edoxaban for AF": {
+        "label": "Edoxaban for AF",
+        "attribute_type": "Categorical_binary"
+    },
+    "Statin for non-cardioembolic ischemic stroke": {
+        "label": "Statin for non-cardioembolic ischemic stroke",
+        "attribute_type": "Categorical_binary"
+    },
+    "Complications": {
+        "label": "Complications",
+        "attribute_type": "Categorical"
+    },
+    "Discharge destination": {
+        "label": "Discharge destination",
+        "attribute_type": "Categorical"
+    },
+    "Modified ranking scale discharge": {
+        "label": "Modified ranking scale discharge",
+        "attribute_type": "Categorical"
+    },
+    "Modified ranking scale 3 month": {
+        "label": "Modified ranking scale 3 month",
+        "attribute_type": "Categorical"
+    },
+    "NIHSS discharge": {
+        "label": "NIHSS discharge",
+        "attribute_type": "Quantitative"
+    },
+    "Patients treated with door-to-needle time <= 60 minutes": {
+        "label": "Patients treated with door-to-needle time <= 60 minutes",
+        "attribute_type": "Categorical_binary"
+    },
+    "Patients treated with door-to-needle time <= 45 minutes": {
+        "label": "Patients treated with door-to-needle time <= 45 minutes",
+        "attribute_type": "Categorical_binary"
+    },
+    "Patients treated with door-to-groin time <= 120 minutes": {
+        "label": "Patients treated with door-to-groin time <= 120 minutes",
+        "attribute_type": "Categorical_binary"
+    },
+    "Patients treated with door-to-groin time <= 90 minutes": {
+        "label": "Patients treated with door-to-groin time <= 90 minutes",
+        "attribute_type": "Categorical_binary"
+    },
+    "Recanalization rate out of total ischemic incidence": {
+        "label": "Recanalization rate out of total ischemic incidence",
+        "attribute_type": "Quantitative"
+    },
+    "Suspected stroke patients undergoing CT/MRI": {
+        "label": "Suspected stroke patients undergoing CT/MRI",
+        "attribute_type": "Categorical_binary"
+    },
+    "Stroke patients undergoing dysphagia screening": {
+        "label": "Stroke patients undergoing dysphagia screening",
+        "attribute_type": "Categorical_binary"
+    },
+    "Ischemic stroke patients discharged with antiplatelets": {
+        "label": "Ischemic stroke patients discharged with antiplatelets",
+        "attribute_type": "Categorical_binary"
+    },
+    "Atrial fibrillation patients discharged with anticoagulants": {
+        "label": "Atrial fibrillation patients discharged with anticoagulants",
+        "attribute_type": "Categorical_binary"
+    },
+    "Stroke patients hospitalized in a dedicated stroke unit / ICU": {
+        "label": "Stroke patients hospitalized in a dedicated stroke unit / ICU",
+        "attribute_type": "Categorical_binary"
+    }
+}
