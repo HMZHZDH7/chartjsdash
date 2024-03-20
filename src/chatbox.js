@@ -135,70 +135,69 @@ async function sendMessage() {
     messageInput.value = "";
 
     // Bot message
-    const botMessage = document.createElement("p");
-    botMessage.classList.add("received-message");
-    botMessage.textContent = "I am a bot";
-
-    const botMessengerID = document.createElement("p");
-    botMessengerID.classList.add("chatbot-id");
-    botMessengerID.textContent = "Chatbot:";
-
-    chatbotMessageContainer.appendChild(botMessengerID);
-    chatbotMessageContainer.appendChild(botMessage);
-
-    chatContainer.appendChild(chatbotMessageContainer);
-    return
-  }
-}
-
-//     const url = 'http://localhost:5005/webhooks/rest/webhook';//'https://dashboards.create.aau.dk/webhooks/rest/webhook';
-//     //const url = 'https://dashboards.create.aau.dk/webhooks/rest/webhook';
-//     const data = {
-//       message: message
-//     };
-
-//     try {
-//       const response = await fetch(url, {
-//         method: 'POST',
-//         headers: {
-//           'Content-Type': 'application/json'
-//         },
-//         body: JSON.stringify(data)
-//       });
-
-//       if (!response.ok) {
-//         throw new Error(`HTTP error! Status: ${response.status}`);
-//       }
-
-//       const responseData = await response.json();
-//       const responseDataArray = responseData.messages || []
-//       console.log(response)
-//       console.log(responseData)
-
-//       responseData.forEach(message => {
-//         console.log(message.text);
-//         const botMessage = document.createElement("div");
-//         botMessage.classList.add("received-message");
-//         botMessage.textContent = message.text;
-//         chatContainer.appendChild(botMessage);
-//       })
-//     } catch (error) {
-//       console.error('Error:', error);
-//       // Handle the error as needed, e.g., show an error message to the user
-//     }
-//     import("./viz").then(function (viz) {
-//       viz.createLineChart()
-//     });
-
-//     //hide the img #overlay and remove class hidden from #viz
-//     const overlay = document.getElementById("overlay");
-//     overlay.classList.add("hidden");
-//     const chart = document.getElementById("viz");
-//     chart.classList.remove("hidden");
+    // const botMessage = document.createElement("p");
+    // botMessage.classList.add("received-message");
+    // botMessage.textContent = "I am a bot";
+    //
+    // const botMessengerID = document.createElement("p");
+    // botMessengerID.classList.add("chatbot-id");
+    // botMessengerID.textContent = "Chatbot:";
+    //
+    // chatbotMessageContainer.appendChild(botMessengerID);
+    // chatbotMessageContainer.appendChild(botMessage);
+    //
+    // chatContainer.appendChild(chatbotMessageContainer);
+    // return
 //   }
 // }
 
-//setupEventListeners();
+    //const url = 'http://localhost:5005/webhooks/rest/webhook';//'https://dashboards.create.aau.dk/webhooks/rest/webhook';
+    const url = 'https://dashboards.create.aau.dk/webhooks/rest/webhook';
+    const data = {
+      message: message
+    };
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const responseData = await response.json();
+      const responseDataArray = responseData.messages || []
+      console.log(response)
+      console.log(responseData)
+
+      responseData.forEach(message => {
+        console.log(message.text);
+        const botMessage = document.createElement("div");
+        botMessage.classList.add("received-message");
+        botMessage.textContent = message.text;
+        chatContainer.appendChild(botMessage);
+      })
+    } catch (error) {
+      console.error('Error:', error);
+      // Handle the error as needed, e.g., show an error message to the user
+    }
+    import("./viz").then(function (viz) {
+      viz.createLineChart()
+    });
+
+    //hide the img #overlay and remove class hidden from #viz
+    const overlay = document.getElementById("overlay");
+    overlay.classList.add("hidden");
+    const chart = document.getElementById("viz");
+    chart.classList.remove("hidden");
+  }
+}
+
 
 
 

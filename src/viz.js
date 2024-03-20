@@ -91,7 +91,8 @@ const saveChartAsPng = (chart) => {
 }
 
 async function fetchData(filename) {
-  return fetch('http://localhost:4000/data-webhook', {
+  //return fetch('http://localhost:4000/data-webhook', {
+  return fetch('https://dashboards.create.aau.dk/data-webhook', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
