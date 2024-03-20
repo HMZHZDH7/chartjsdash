@@ -361,18 +361,20 @@ body {
   cursor: pointer;
   background: #fff;
   height: 70%;
-  margin: 0 4px;
+  margin: 45px 4px 0 0;
+  transform: rotateX(180deg);
 }
 
 #gallery-container {
-  align-items: top;
+  white-space: nowrap;
   flex-direction: row;
   justify-content: start;
   width: 100%;
   height: 100%;
-  padding: 20px 0 0;
+  margin: 0;
   display: flex;
   overflow-x: auto;
+  transform: rotateX(180deg);
 }
 
 .thumbnail-selected {
@@ -381,5 +383,13 @@ body {
 
 .hidden {
   display: none;
+}
+
+#hospital-select {
+  cursor: pointer;
+  width: 100%;
+  margin: 10px 0;
+  padding: 3px;
+  font-size: 16px;
 }
 /*# sourceMappingURL=index.b2625c6b.css.map */

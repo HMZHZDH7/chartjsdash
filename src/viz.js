@@ -4,6 +4,7 @@ import { showImage } from './chatbox.js'
 import Chart from "chart.js/auto";
 //import data from './data.json'
 // visualization.js
+var allChartsThatWeHaveSaved = []
 
 // Function to create the line chart
 export async function createLineChart() {
@@ -31,10 +32,8 @@ export async function createLineChart() {
   if (chartStatus !== undefined) {
     chartStatus.destroy();
   }
-  // save the chart as a png
-  // Chart.toFile('/charts/mychart.png');
 
-  var chart = new Chart(ctx, {
+  const chart = new Chart(ctx, {
     type: args.visualization.type,
     data: {
       labels: labels,
@@ -67,17 +66,23 @@ export async function createLineChart() {
       },
       animation: {
         onComplete: function () {
-          saveChartAsPng(chart.toBase64Image());
+          let base = chart.toBase64Image();
+          console.log(base);
+          for (let i = 0; i < allChartsThatWeHaveSaved.length; i++) {
+            if (allChartsThatWeHaveSaved[i] === chart) {
+              return;
+            }
+          }
+          allChartsThatWeHaveSaved.push(chart);
+          saveChartAsPng(base);
         }
       }
     }
   });
-
-
-
 }
 
-const saveChartAsPng = (chart) => {
+
+async function saveChartAsPng(chart) {
   let img = document.createElement("img");
   img.classList.add("gallery-image");
   img.src = chart;

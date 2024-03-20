@@ -2,7 +2,8 @@
 const xy = require('../data/hobbit.json')
 let yAxis = 'Age'
 let xAxis = 'Gender';
-let plotType = 'line'
+let plotType = 'line';
+
 
 async function setupEventListeners() {
   const messageInput = document.getElementById("input");
@@ -34,6 +35,12 @@ async function setupEventListeners() {
   const plotTypeSelect = document.getElementById("plot-type-select");
   plotTypeSelect.addEventListener("change", (event) => {
     plotType = event.target.value
+    // TODO: send to RASA
+  });
+  const trendLine = document.getElementById("trend-line");
+  trendLine.addEventListener("change", (event) => {
+    trendLineActive = event.target.value
+    console.log(trendLineActive.checked)
     // TODO: send to RASA
   });
 };

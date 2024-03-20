@@ -587,14 +587,15 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 // visualization.js
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-//import data from './data.json'
-// visualization.js
 // Function to create the line chart
 parcelHelpers.export(exports, "createLineChart", ()=>createLineChart);
 var _chatboxJs = require("./chatbox.js");
 // Function to create the line chart
 var _auto = require("chart.js/auto");
 var _autoDefault = parcelHelpers.interopDefault(_auto);
+//import data from './data.json'
+// visualization.js
+var allChartsThatWeHaveSaved = [];
 async function createLineChart() {
     // Extracting YQ and Value from the JSON data
     let data;
@@ -611,9 +612,7 @@ async function createLineChart() {
     const ctx = document.getElementById("viz");
     let chartStatus = (0, _autoDefault.default).getChart(ctx);
     if (chartStatus !== undefined) chartStatus.destroy();
-    // save the chart as a png
-    // Chart.toFile('/charts/mychart.png');
-    var chart = new (0, _autoDefault.default)(ctx, {
+    const chart = new (0, _autoDefault.default)(ctx, {
         type: args.visualization.type,
         data: {
             labels: labels,
@@ -648,13 +647,19 @@ async function createLineChart() {
             },
             animation: {
                 onComplete: function() {
-                    saveChartAsPng(chart.toBase64Image());
+                    let base = chart.toBase64Image();
+                    console.log(base);
+                    for(let i = 0; i < allChartsThatWeHaveSaved.length; i++){
+                        if (allChartsThatWeHaveSaved[i] === chart) return;
+                    }
+                    allChartsThatWeHaveSaved.push(chart);
+                    saveChartAsPng(base);
                 }
             }
         }
     });
 }
-const saveChartAsPng = (chart)=>{
+async function saveChartAsPng(chart) {
     let img = document.createElement("img");
     img.classList.add("gallery-image");
     img.src = chart;
@@ -662,7 +667,7 @@ const saveChartAsPng = (chart)=>{
         (0, _chatboxJs.showImage)(img);
     };
     document.getElementById("gallery-container").appendChild(img);
-};
+}
 async function fetchData(filename) {
     return fetch("http://localhost:4000/data-webhook", {
         method: "POST",

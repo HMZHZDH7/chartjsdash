@@ -620,6 +620,12 @@ async function setupEventListeners() {
         plotType = event.target.value;
     // TODO: send to RASA
     });
+    const trendLine = document.getElementById("trend-line");
+    trendLine.addEventListener("change", (event)=>{
+        trendLineActive = event.target.value;
+        console.log(trendLineActive.checked);
+    // TODO: send to RASA
+    });
 }
 function showImage(thumbnail) {
     //print out 'this works' to the console
