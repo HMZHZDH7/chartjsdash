@@ -585,7 +585,14 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 
 },{}],"7LLTF":[function(require,module,exports) {
 // chatbox.js
-function setupEventListeners() {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "showImage", ()=>showImage);
+const xy = require("8d66e6a4ba26fcab");
+let yAxis = "Age";
+let xAxis = "Gender";
+let plotType = "line";
+async function setupEventListeners() {
     const messageInput = document.getElementById("input");
     messageInput.addEventListener("keyup", (event)=>{
         if (event.key === "Enter") sendMessage();
@@ -594,6 +601,42 @@ function setupEventListeners() {
     sendButton.onclick = sendMessage;
     const menuButton = document.getElementById("pop-up-button");
     menuButton.onclick = openMenu;
+    const thumbnails = document.getElementsByClassName("gallery-image");
+    for(let i = 0; i < thumbnails.length; i++)thumbnails[i].addEventListener("click", ()=>{
+        showImage(thumbnails[i]);
+    });
+    const yAxisSelect = document.getElementById("y-axis-select");
+    yAxisSelect.addEventListener("change", (event)=>{
+        yAxis = event.target.value;
+    // TODO: send to RASA
+    });
+    const xAxisSelect = document.getElementById("x-axis-select");
+    xAxisSelect.addEventListener("change", (event)=>{
+        xAxis = event.target.value;
+    // TODO: send to RASA
+    });
+    const plotTypeSelect = document.getElementById("plot-type-select");
+    plotTypeSelect.addEventListener("change", (event)=>{
+        plotType = event.target.value;
+    // TODO: send to RASA
+    });
+}
+function showImage(thumbnail) {
+    //print out 'this works' to the console
+    console.log(thumbnail);
+    // create overlay div with thumbnail
+    const overlay = document.getElementById("overlay");
+    overlay.src = thumbnail.src;
+    overlay.classList.remove("hidden");
+    const chart = document.getElementById("viz");
+    chart.classList.add("hidden");
+    const selected = document.getElementsByClassName("thumbnail-selected");
+    console.log(selected);
+    if (selected.length != 0) {
+        console.log("removing class" + selected);
+        selected[0].classList.remove("thumbnail-selected");
+        thumbnail.classList.add("thumbnail-selected");
+    } else thumbnail.classList.add("thumbnail-selected");
 }
 function openMenu() {
     const menu = document.getElementById("pop-up");
@@ -606,6 +649,30 @@ function openMenu() {
         menuButton.classList.add("rotate");
     }
 }
+document.addEventListener("DOMContentLoaded", async function() {
+    // Your code here
+    // create an array of all images
+    const chartLibrary = [
+        "./public/chart1.png",
+        "./public/chart2.png",
+        "./public/chart1.png",
+        "./public/chart2.png",
+        "./public/chart1.png",
+        "./public/chart2.png"
+    ];
+    const galleryContainer = document.getElementById("gallery-container");
+    //loop through the image array
+    for(let i = 0; i < chartLibrary.length; i++){
+        //create a new image element
+        let img = new Image();
+        img = document.createElement("img");
+        img.classList.add("gallery-image");
+        //set the source of the image element
+        img.src = chartLibrary[i];
+        galleryContainer.appendChild(img);
+    }
+    await setupEventListeners();
+});
 async function sendMessage() {
     const messageInput = document.getElementById("input");
     const message = messageInput.value;
@@ -637,121 +704,108 @@ async function sendMessage() {
         chatbotMessageContainer.appendChild(botMessengerID);
         chatbotMessageContainer.appendChild(botMessage);
         chatContainer.appendChild(chatbotMessageContainer);
-        var message1, error;
         return;
-
     }
 }
-setupEventListeners();
-async function getURL() {
-    const url = "https://dashboards.create.aau.dk/webhooks/rest/webhook/status";
-    const response = await fetch(url);
-    if (response.status === 200) return "http://localhost:5005";
-    else return "https://dashboards.create.aau.dk:5005";
-}
-
-},{"2d773bba916997e6":"aXzLB"}],"aXzLB":[function(require,module,exports) {
-module.exports = require("5bf27e11bd6e4ca5")(require("172d5feef6c8e54d").getBundleURL("4EIhp") + "viz.b2f83f57.js" + "?" + Date.now()).catch((err)=>{
-    delete module.bundle.cache[module.id];
-    throw err;
-}).then(()=>module.bundle.root("dNh3d"));
-
-},{"5bf27e11bd6e4ca5":"61B45","172d5feef6c8e54d":"lgJ39"}],"61B45":[function(require,module,exports) {
-"use strict";
-var cacheLoader = require("ca2a84f7fa4a3bb0");
-module.exports = cacheLoader(function(bundle) {
-    return new Promise(function(resolve, reject) {
-        // Don't insert the same script twice (e.g. if it was already in the HTML)
-        var existingScripts = document.getElementsByTagName("script");
-        if ([].concat(existingScripts).some(function isCurrentBundle(script) {
-            return script.src === bundle;
-        })) {
-            resolve();
-            return;
-        }
-        var preloadLink = document.createElement("link");
-        preloadLink.href = bundle;
-        preloadLink.rel = "preload";
-        preloadLink.as = "script";
-        document.head.appendChild(preloadLink);
-        var script = document.createElement("script");
-        script.async = true;
-        script.type = "text/javascript";
-        script.src = bundle;
-        script.onerror = function(e) {
-            var error = new TypeError("Failed to fetch dynamically imported module: ".concat(bundle, ". Error: ").concat(e.message));
-            script.onerror = script.onload = null;
-            script.remove();
-            reject(error);
-        };
-        script.onload = function() {
-            script.onerror = script.onload = null;
-            resolve();
-        };
-        document.getElementsByTagName("head")[0].appendChild(script);
+//     const url = 'http://localhost:5005/webhooks/rest/webhook';//'https://dashboards.create.aau.dk/webhooks/rest/webhook';
+//     //const url = 'https://dashboards.create.aau.dk/webhooks/rest/webhook';
+//     const data = {
+//       message: message
+//     };
+//     try {
+//       const response = await fetch(url, {
+//         method: 'POST',
+//         headers: {
+//           'Content-Type': 'application/json'
+//         },
+//         body: JSON.stringify(data)
+//       });
+//       if (!response.ok) {
+//         throw new Error(`HTTP error! Status: ${response.status}`);
+//       }
+//       const responseData = await response.json();
+//       const responseDataArray = responseData.messages || []
+//       console.log(response)
+//       console.log(responseData)
+//       responseData.forEach(message => {
+//         console.log(message.text);
+//         const botMessage = document.createElement("div");
+//         botMessage.classList.add("received-message");
+//         botMessage.textContent = message.text;
+//         chatContainer.appendChild(botMessage);
+//       })
+//     } catch (error) {
+//       console.error('Error:', error);
+//       // Handle the error as needed, e.g., show an error message to the user
+//     }
+//     import("./viz").then(function (viz) {
+//       viz.createLineChart()
+//     });
+//     //hide the img #overlay and remove class hidden from #viz
+//     const overlay = document.getElementById("overlay");
+//     overlay.classList.add("hidden");
+//     const chart = document.getElementById("viz");
+//     chart.classList.remove("hidden");
+//   }
+// }
+//setupEventListeners();
+// async function getURL() {
+//   const url = 'https://dashboards.create.aau.dk/webhooks/rest/webhook/status';
+//   const response = await fetch(url);
+//   if (response.status === 200) {
+//     return "http://localhost:5005"
+//   } else {
+//     return "https://dashboards.create.aau.dk:5005"
+//   }
+// }
+const generateXAndYAxisDropdowns = ()=>{
+    const xDropdown = document.getElementById("x-axis-select");
+    const yDropdown = document.getElementById("y-axis-select");
+    Object.keys(xy).forEach((key)=>{
+        const xoption = document.createElement("option");
+        xoption.value = key;
+        xoption.text = key;
+        const yoption = document.createElement("option");
+        yoption.value = key;
+        yoption.text = key;
+        xDropdown.appendChild(xoption);
+        yDropdown.appendChild(yoption);
     });
-});
+};
+generateXAndYAxisDropdowns();
 
-},{"ca2a84f7fa4a3bb0":"j49pS"}],"j49pS":[function(require,module,exports) {
-"use strict";
-var cachedBundles = {};
-var cachedPreloads = {};
-var cachedPrefetches = {};
-function getCache(type) {
-    switch(type){
-        case "preload":
-            return cachedPreloads;
-        case "prefetch":
-            return cachedPrefetches;
-        default:
-            return cachedBundles;
-    }
-}
-module.exports = function(loader, type) {
-    return function(bundle) {
-        var cache = getCache(type);
-        if (cache[bundle]) return cache[bundle];
-        return cache[bundle] = loader.apply(null, arguments).catch(function(e) {
-            delete cache[bundle];
-            throw e;
-        });
+},{"8d66e6a4ba26fcab":"iRCMs","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iRCMs":[function(require,module,exports) {
+module.exports = JSON.parse('{"Age":{"label":"Age","attribute_type":"Quantitative"},"Gender":{"label":"Gender","attribute_type":"Categorical"},"NIHSS":{"label":"NIHSS","attribute_type":"Quantitative"},"BP systolic":{"label":"BP systolic","attribute_type":"Quantitative"},"BP diastolic":{"label":"BP diastolic","attribute_type":"Quantitative"},"Glucose":{"label":"Glucose","attribute_type":"Quantitative"},"LDL cholesterol":{"label":"LDL cholesterol","attribute_type":"Quantitative"},"mRS 2-5":{"label":"mRS 2-5","attribute_type":"Categorical"},"COVID positive":{"label":"COVID positive","attribute_type":"Categorical_binary"},"In-hospital stroke":{"label":"In-hospital stroke","attribute_type":"Categorical_binary"},"Arrival pre-notified":{"label":"Arrival pre-notified","attribute_type":"Categorical_binary"},"Hypertension":{"label":"Hypertension","attribute_type":"Categorical_binary"},"Diabetes":{"label":"Diabetes","attribute_type":"Categorical_binary"},"Hyperlipidemia":{"label":"Hyperlipidemia","attribute_type":"Categorical_binary"},"Active smoker":{"label":"Active smoker","attribute_type":"Categorical_binary"},"Previous IS/TIA":{"label":"Previous IS/TIA","attribute_type":"Categorical_binary"},"Previous ICH":{"label":"Previous ICH","attribute_type":"Categorical_binary"},"Cor. Artery Disease / Previous MI":{"label":"Cor. Artery Disease / Previous MI","attribute_type":"Categorical_binary"},"Cong. Heart Fail":{"label":"Cong. Heart Fail","attribute_type":"Categorical_binary"},"HIV":{"label":"HIV","attribute_type":"Categorical_binary"},"Type of stroke":{"label":"Type of stroke","attribute_type":"Categorical"},"Arrival":{"label":"Arrival","attribute_type":"Quantitative"},"First received care":{"label":"First received care","attribute_type":"Quantitative"},"Hospitalized at unit":{"label":"Hospitalized at unit","attribute_type":"Categorical"},"Hospitalized at department":{"label":"Hospitalized at department","attribute_type":"Categorical"},"Anti Diabetics":{"label":"Anti Diabetics","attribute_type":"Categorical_binary"},"Anti Hypertensives":{"label":"Anti Hypertensives","attribute_type":"Categorical_binary"},"Aspirin (ASA)":{"label":"Aspirin (ASA)","attribute_type":"Categorical_binary"},"Cilostazol":{"label":"Cilostazol","attribute_type":"Categorical_binary"},"Clopidogrel":{"label":"Clopidogrel","attribute_type":"Categorical_binary"},"Ticagrelol":{"label":"Ticagrelol","attribute_type":"Categorical_binary"},"Ticlopidine":{"label":"Ticlopidine","attribute_type":"Categorical_binary"},"Prasugrel":{"label":"Prasugrel","attribute_type":"Categorical_binary"},"Dipyridamol, slow release":{"label":"Dipyridamol, slow release","attribute_type":"Categorical_binary"},"Warfarin":{"label":"Warfarin","attribute_type":"Categorical_binary"},"Low molecular weight heparin/heparin":{"label":"Low molecular weight heparin/heparin","attribute_type":"Categorical_binary"},"Dabigatran":{"label":"Dabigatran","attribute_type":"Categorical_binary"},"Rivoroxaban":{"label":"Rivoroxaban","attribute_type":"Categorical_binary"},"Apixaban":{"label":"Apixaban","attribute_type":"Categorical_binary"},"Edoxaban":{"label":"Edoxaban","attribute_type":"Categorical_binary"},"Statin":{"label":"Statin","attribute_type":"Categorical_binary"},"Ischemic stroke etiology":{"label":"Ischemic stroke etiology","attribute_type":"Categorical"},"Stroke mimics":{"label":"Stroke mimics","attribute_type":"Categorical"},"ICH volume":{"label":"ICH volume","attribute_type":"Quantitative"},"Infratentorial bleeding":{"label":"Infratentorial bleeding","attribute_type":"Categorical_binary"},"Source of bleeding found":{"label":"Source of bleeding found","attribute_type":"Categorical"},"Intraventricular bleeding":{"label":"Intraventricular bleeding","attribute_type":"Categorical_binary"},"ICH score":{"label":"ICH score","attribute_type":"Quantitative"},"Neurosurgery for ICH":{"label":"Neurosurgery for ICH","attribute_type":"Categorical_binary"},"Neurosurgery for SAH":{"label":"Neurosurgery for SAH","attribute_type":"Categorical_binary"},"ICH bleeding cause":{"label":"ICH bleeding cause","attribute_type":"Categorical"},"DVT prevention for ICH":{"label":"DVT prevention for ICH","attribute_type":"Categorical_binary"},"Hunt-Hess":{"label":"Hunt-Hess","attribute_type":"Quantitative"},"Imaging modality":{"label":"Imaging modality","attribute_type":"Categorical"},"Site of occlusion":{"label":"Site of occlusion","attribute_type":"Categorical"},"Imaging not done at all":{"label":"Imaging not done at all","attribute_type":"Categorical_binary"},"Imaging done but outside your hospital":{"label":"Imaging done but outside your hospital","attribute_type":"Categorical_binary"},"Door-to-imaging time":{"label":"Door-to-imaging time","attribute_type":"Quantitative"},"CT perfusion score":{"label":"CT perfusion score","attribute_type":"Quantitative"},"CT perfusion hypoperfusion":{"label":"CT perfusion hypoperfusion","attribute_type":"Quantitative"},"Carotid arteries imaging within 7 days after admission":{"label":"Carotid arteries imaging within 7 days after admission","attribute_type":"Categorical_binary"},"Symptomatic carotid stenosis > 70%":{"label":"Symptomatic carotid stenosis > 70%","attribute_type":"Categorical_binary"},"Symptomatic carotid stenosis 50-70%":{"label":"Symptomatic carotid stenosis 50-70%","attribute_type":"Categorical_binary"},"Number of IVT":{"label":"Number of IVT","attribute_type":"Quantitative"},"% IVT of all ischemic strokes":{"label":"% IVT of all ischemic strokes","attribute_type":"Quantitative"},"Onset-to-door time for IVT, median":{"label":"Onset-to-door time for IVT, median","attribute_type":"Quantitative"},"Door-to-needle for IVT, median":{"label":"Door-to-needle for IVT, median","attribute_type":"Quantitative"},"% MT only of all ischemic strokes":{"label":"% MT only of all ischemic strokes","attribute_type":"Quantitative"},"% IVT+MT of all ischemic strokes":{"label":"% IVT+MT of all ischemic strokes","attribute_type":"Quantitative"},"Door-to-groin for MT, median. Direct (primary transport)":{"label":"Door-to-groin for MT, median. Direct (primary transport)","attribute_type":"Quantitative"},"Door-to-groin for MT, median. Drip-and-ship (secondary transport)":{"label":"Door-to-groin for MT, median. Drip-and-ship (secondary transport)","attribute_type":"Quantitative"},"Door-in-door-out, median. For PSC, transport to CSC for MT":{"label":"Door-in-door-out, median. For PSC, transport to CSC for MT","attribute_type":"Quantitative"},"TICI scores":{"label":"TICI scores","attribute_type":"Categorical"},"Bleeding after IVT/MT":{"label":"Bleeding after IVT/MT","attribute_type":"Categorical_binary"},"Complications after MT":{"label":"Complications after MT","attribute_type":"Categorical_binary"},"DVT prevention":{"label":"DVT prevention","attribute_type":"Categorical_binary"},"Decompressive hemicraniectomy of patients >60 years and > NIHSS":{"label":"Decompressive hemicraniectomy of patients >60 years and > NIHSS","attribute_type":"Categorical_binary"},"Carotid artery imaging <= 7 days after admission":{"label":"Carotid artery imaging <= 7 days after admission","attribute_type":"Categorical_binary"},">70% internal carotid artery stenosis":{"label":">70% internal carotid artery stenosis","attribute_type":"Categorical_binary"},"Carotid endarterectomy of patients with >70% ICA stenosis":{"label":"Carotid endarterectomy of patients with >70% ICA stenosis","attribute_type":"Categorical_binary"},"Antipyretic administered for the first elevated temperature":{"label":"Antipyretic administered for the first elevated temperature","attribute_type":"Categorical_binary"},"Was insulin administered for the first elevated glucose (>=10 mmol/L)?":{"label":"Was insulin administered for the first elevated glucose (>=10 mmol/L)?","attribute_type":"Categorical_binary"},"Dysphagia screening performed before given medication/food orally":{"label":"Dysphagia screening performed before given medication/food orally","attribute_type":"Categorical_binary"},"Physiotherapy initiated <= 72 hours after admission":{"label":"Physiotherapy initiated <= 72 hours after admission","attribute_type":"Categorical_binary"},"Patient examined by occupational therapist":{"label":"Patient examined by occupational therapist","attribute_type":"Categorical_binary"},"Who performed swallowing screen":{"label":"Who performed swallowing screen","attribute_type":"Categorical"},"Reasons for not providing IVT":{"label":"Reasons for not providing IVT","attribute_type":"Categorical"},"Test for dysphagia screen":{"label":"Test for dysphagia screen","attribute_type":"Categorical"},"Warfarin for AF":{"label":"Warfarin for AF","attribute_type":"Categorical_binary"},"Low molecular weight heparin/heparin for AF":{"label":"Low molecular weight heparin/heparin for AF","attribute_type":"Categorical_binary"},"Dabigatran for AF":{"label":"Dabigatran for AF","attribute_type":"Categorical_binary"},"Rivoroxaban for AF":{"label":"Rivoroxaban for AF","attribute_type":"Categorical_binary"},"Apixaban for AF":{"label":"Apixaban for AF","attribute_type":"Categorical_binary"},"Edoxaban for AF":{"label":"Edoxaban for AF","attribute_type":"Categorical_binary"},"Statin for non-cardioembolic ischemic stroke":{"label":"Statin for non-cardioembolic ischemic stroke","attribute_type":"Categorical_binary"},"Complications":{"label":"Complications","attribute_type":"Categorical"},"Discharge destination":{"label":"Discharge destination","attribute_type":"Categorical"},"Modified ranking scale discharge":{"label":"Modified ranking scale discharge","attribute_type":"Categorical"},"Modified ranking scale 3 month":{"label":"Modified ranking scale 3 month","attribute_type":"Categorical"},"NIHSS discharge":{"label":"NIHSS discharge","attribute_type":"Quantitative"},"Patients treated with door-to-needle time <= 60 minutes":{"label":"Patients treated with door-to-needle time <= 60 minutes","attribute_type":"Categorical_binary"},"Patients treated with door-to-needle time <= 45 minutes":{"label":"Patients treated with door-to-needle time <= 45 minutes","attribute_type":"Categorical_binary"},"Patients treated with door-to-groin time <= 120 minutes":{"label":"Patients treated with door-to-groin time <= 120 minutes","attribute_type":"Categorical_binary"},"Patients treated with door-to-groin time <= 90 minutes":{"label":"Patients treated with door-to-groin time <= 90 minutes","attribute_type":"Categorical_binary"},"Recanalization rate out of total ischemic incidence":{"label":"Recanalization rate out of total ischemic incidence","attribute_type":"Quantitative"},"Suspected stroke patients undergoing CT/MRI":{"label":"Suspected stroke patients undergoing CT/MRI","attribute_type":"Categorical_binary"},"Stroke patients undergoing dysphagia screening":{"label":"Stroke patients undergoing dysphagia screening","attribute_type":"Categorical_binary"},"Ischemic stroke patients discharged with antiplatelets":{"label":"Ischemic stroke patients discharged with antiplatelets","attribute_type":"Categorical_binary"},"Atrial fibrillation patients discharged with anticoagulants":{"label":"Atrial fibrillation patients discharged with anticoagulants","attribute_type":"Categorical_binary"},"Stroke patients hospitalized in a dedicated stroke unit / ICU":{"label":"Stroke patients hospitalized in a dedicated stroke unit / ICU","attribute_type":"Categorical_binary"}}');
+
+},{}],"gkKU3":[function(require,module,exports) {
+exports.interopDefault = function(a) {
+    return a && a.__esModule ? a : {
+        default: a
     };
 };
-
-},{}],"lgJ39":[function(require,module,exports) {
-"use strict";
-var bundleURL = {};
-function getBundleURLCached(id) {
-    var value = bundleURL[id];
-    if (!value) {
-        value = getBundleURL();
-        bundleURL[id] = value;
-    }
-    return value;
-}
-function getBundleURL() {
-    try {
-        throw new Error();
-    } catch (err) {
-        var matches = ("" + err.stack).match(/(https?|file|ftp|(chrome|moz|safari-web)-extension):\/\/[^)\n]+/g);
-        if (matches) // The first two stack frames will be this function and getBundleURLCached.
-        // Use the 3rd one, which will be a runtime in the original bundle.
-        return getBaseURL(matches[2]);
-    }
-    return "/";
-}
-function getBaseURL(url) {
-    return ("" + url).replace(/^((?:https?|file|ftp|(chrome|moz|safari-web)-extension):\/\/.+)\/[^/]+$/, "$1") + "/";
-}
-// TODO: Replace uses with `new URL(url).origin` when ie11 is no longer supported.
-function getOrigin(url) {
-    var matches = ("" + url).match(/(https?|file|ftp|(chrome|moz|safari-web)-extension):\/\/[^/]+/);
-    if (!matches) throw new Error("Origin not found");
-    return matches[0];
-}
-exports.getBundleURL = getBundleURLCached;
-exports.getBaseURL = getBaseURL;
-exports.getOrigin = getOrigin;
+exports.defineInteropFlag = function(a) {
+    Object.defineProperty(a, "__esModule", {
+        value: true
+    });
+};
+exports.exportAll = function(source, dest) {
+    Object.keys(source).forEach(function(key) {
+        if (key === "default" || key === "__esModule" || Object.prototype.hasOwnProperty.call(dest, key)) return;
+        Object.defineProperty(dest, key, {
+            enumerable: true,
+            get: function() {
+                return source[key];
+            }
+        });
+    });
+    return dest;
+};
+exports.export = function(dest, destName, get) {
+    Object.defineProperty(dest, destName, {
+        enumerable: true,
+        get: get
+    });
+};
 
 },{}]},["1ZN8K","7LLTF"], "7LLTF", "parcelRequirefe81")
 

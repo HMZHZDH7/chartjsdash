@@ -1,5 +1,5 @@
 // visualization.js
-
+import { showImage } from './chatbox.js'
 // Function to create the line chart
 import Chart from "chart.js/auto";
 //import data from './data.json'
@@ -34,13 +34,15 @@ export async function createLineChart() {
   if (chartStatus !== undefined) {
     chartStatus.destroy();
   }
+  // save the chart as a png
+  // Chart.toFile('/charts/mychart.png');
 
-  new Chart(ctx, {
+  var chart = new Chart(ctx, {
     type: args.visualization.type,
     data: {
       labels: labels,
       datasets: [{
-        label: 'Timeline Chart',
+        label: 'Timeline Chartsss',
         data: values,
         borderColor: '#ff4081',
         borderWidth: 2,
@@ -65,9 +67,27 @@ export async function createLineChart() {
           },
           beginAtZero: true
         }
+      },
+      animation: {
+        onComplete: function () {
+          saveChartAsPng(chart.toBase64Image());
+        }
       }
     }
   });
+
+
+
+}
+
+const saveChartAsPng = (chart) => {
+  let img = document.createElement("img");
+  img.classList.add("gallery-image");
+  img.src = chart;
+  img.onclick = () => {
+    showImage(img);
+  }
+  document.getElementById("gallery-container").appendChild(img);
 }
 
 async function fetchData(filename) {

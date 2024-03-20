@@ -585,13 +585,14 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 
 },{}],"dNh3d":[function(require,module,exports) {
 // visualization.js
-// Function to create the line chart
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 //import data from './data.json'
 // visualization.js
 // Function to create the line chart
 parcelHelpers.export(exports, "createLineChart", ()=>createLineChart);
+var _chatboxJs = require("./chatbox.js");
+// Function to create the line chart
 var _auto = require("chart.js/auto");
 var _autoDefault = parcelHelpers.interopDefault(_auto);
 async function createLineChart() {
@@ -604,20 +605,21 @@ async function createLineChart() {
     }).catch((error)=>{
         console.error("Error fetching data:", error);
     });
-    console.log(args.visualization.type);
     const labels = data.map((item)=>item.YQ);
     const values = data.map((item)=>item.Value);
     // Creating a line chart
     const ctx = document.getElementById("viz");
     let chartStatus = (0, _autoDefault.default).getChart(ctx);
     if (chartStatus !== undefined) chartStatus.destroy();
-    new (0, _autoDefault.default)(ctx, {
+    // save the chart as a png
+    // Chart.toFile('/charts/mychart.png');
+    var chart = new (0, _autoDefault.default)(ctx, {
         type: args.visualization.type,
         data: {
             labels: labels,
             datasets: [
                 {
-                    label: "Timeline Chart",
+                    label: "Timeline Chartsss",
                     data: values,
                     borderColor: "#ff4081",
                     borderWidth: 2,
@@ -643,10 +645,24 @@ async function createLineChart() {
                     },
                     beginAtZero: true
                 }
+            },
+            animation: {
+                onComplete: function() {
+                    saveChartAsPng(chart.toBase64Image());
+                }
             }
         }
     });
 }
+const saveChartAsPng = (chart)=>{
+    let img = document.createElement("img");
+    img.classList.add("gallery-image");
+    img.src = chart;
+    img.onclick = ()=>{
+        (0, _chatboxJs.showImage)(img);
+    };
+    document.getElementById("gallery-container").appendChild(img);
+};
 async function fetchData(filename) {
     return fetch("http://localhost:4000/data-webhook", {
         method: "POST",
@@ -658,7 +674,6 @@ async function fetchData(filename) {
         if (!response.ok) throw new Error("Network response was not ok");
         return response.json(); // Parse the response body as JSON
     }).then((data)=>{
-        console.log("Received JSON data:", data);
         return data; // Return the fetched data
     }).catch((error)=>{
         console.error("There was a problem fetching JSON data:", error);
@@ -668,7 +683,7 @@ async function fetchData(filename) {
 // Fetch data from data.json and create the chart
 createLineChart().then((r)=>console.log("Chart created"));
 
-},{"chart.js/auto":"d8NN9","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"d8NN9":[function(require,module,exports) {
+},{"chart.js/auto":"d8NN9","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./chatbox.js":"7LLTF"}],"d8NN9":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _chartJs = require("../dist/chart.js");
@@ -14084,36 +14099,6 @@ function index_esm(input) {
     return new Color(input);
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
-exports.interopDefault = function(a) {
-    return a && a.__esModule ? a : {
-        default: a
-    };
-};
-exports.defineInteropFlag = function(a) {
-    Object.defineProperty(a, "__esModule", {
-        value: true
-    });
-};
-exports.exportAll = function(source, dest) {
-    Object.keys(source).forEach(function(key) {
-        if (key === "default" || key === "__esModule" || Object.prototype.hasOwnProperty.call(dest, key)) return;
-        Object.defineProperty(dest, key, {
-            enumerable: true,
-            get: function() {
-                return source[key];
-            }
-        });
-    });
-    return dest;
-};
-exports.export = function(dest, destName, get) {
-    Object.defineProperty(dest, destName, {
-        enumerable: true,
-        get: get
-    });
-};
-
-},{}]},["kOIIb","dNh3d"], "dNh3d", "parcelRequirefe81")
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["kOIIb","dNh3d"], "dNh3d", "parcelRequirefe81")
 
 //# sourceMappingURL=index.b2f83f57.js.map
