@@ -584,14 +584,20 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 }
 
 },{}],"7LLTF":[function(require,module,exports) {
-// chatbox.js
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "showImage", ()=>showImage);
+var _cors = require("cors");
+var _corsDefault = parcelHelpers.interopDefault(_cors);
+// chatbox.js
 const xy = require("8d66e6a4ba26fcab");
 let yAxis = "Age";
 let xAxis = "Gender";
 let plotType = "line";
+let trendLineChecked = false;
+let errorBarChecked = false;
+let nationalValuesChecked = false;
+let selectedHospitals = [];
 async function setupEventListeners() {
     const messageInput = document.getElementById("input");
     messageInput.addEventListener("keyup", (event)=>{
@@ -608,23 +614,46 @@ async function setupEventListeners() {
     const yAxisSelect = document.getElementById("y-axis-select");
     yAxisSelect.addEventListener("change", (event)=>{
         yAxis = event.target.value;
-    // TODO: send to RASA
+    //sendMessageToRasa('y-axis: ' + yAxis)
     });
     const xAxisSelect = document.getElementById("x-axis-select");
     xAxisSelect.addEventListener("change", (event)=>{
         xAxis = event.target.value;
-    // TODO: send to RASA
+    //sendMessageToRasa('x-axis: ' + xAxis)
     });
     const plotTypeSelect = document.getElementById("plot-type-select");
     plotTypeSelect.addEventListener("change", (event)=>{
         plotType = event.target.value;
-    // TODO: send to RASA
+    //sendMessageToRasa('plot-type: ' + plotType)
     });
     const trendLine = document.getElementById("trend-line");
     trendLine.addEventListener("change", (event)=>{
-        trendLineActive = event.target.value;
-        console.log(trendLineActive.checked);
-    // TODO: send to RASA
+        if (trendLine.checked === true) trendLineChecked = true;
+        else trendLineChecked = false;
+    //sendMessageToRasa('trend-line: ' + trendLineChecked)
+    });
+    const errorBar = document.getElementById("error-bar");
+    errorBar.addEventListener("change", (event)=>{
+        if (errorBar.checked === true) errorBarChecked = true;
+        else errorBarChecked = false;
+    //sendMessageToRasa('error-bar: ' + errorBarChecked)
+    });
+    const nationalValues = document.getElementById("national-values");
+    nationalValues.addEventListener("change", (event)=>{
+        if (nationalValues.checked === true) nationalValuesChecked = true;
+        else nationalValuesChecked = false;
+    //sendMessageToRasa('national-values: ' + nationalValuesChecked)
+    });
+    const hospitalComparison = document.getElementById("hospital-select");
+    hospitalComparison.addEventListener("change", (event)=>{
+        selectedHospitals = Array.from(hospitalComparison.options).filter((option)=>option.selected).map((option)=>option.value);
+        if (selectedHospitals.includes("None")) {
+            console.log("None selected");
+            selectedHospitals = [
+                "None"
+            ];
+        } else console.log(selectedHospitals);
+    //sendMessageToRasa('compare with hospitals: ' + selectedHospitals)
     });
 }
 function showImage(thumbnail) {
@@ -683,7 +712,7 @@ async function sendMessage() {
     const messageInput = document.getElementById("input");
     const message = messageInput.value;
     if (message.trim() !== "") {
-        const chatContainer = document.getElementById("chat");
+        const chatContainer1 = document.getElementById("chat");
         const userMessageContainer = document.createElement("div");
         userMessageContainer.classList.add("message-container");
         const chatbotMessageContainer = document.createElement("div");
@@ -698,8 +727,10 @@ async function sendMessage() {
         userMessageContainer.appendChild(messengerID);
         userMessageContainer.appendChild(userMessage);
         // Ship it to frontend
-        chatContainer.appendChild(userMessageContainer);
+        chatContainer1.appendChild(userMessageContainer);
         messageInput.value = "";
+        // Send message to Rasa
+        // sendMessageToRasa(message);
         // Bot message
         const botMessage = document.createElement("p");
         botMessage.classList.add("received-message");
@@ -709,52 +740,49 @@ async function sendMessage() {
         botMessengerID.textContent = "Chatbot:";
         chatbotMessageContainer.appendChild(botMessengerID);
         chatbotMessageContainer.appendChild(botMessage);
-        chatContainer.appendChild(chatbotMessageContainer);
+        chatContainer1.appendChild(chatbotMessageContainer);
         return;
     }
 }
-//     const url = 'http://localhost:5005/webhooks/rest/webhook';//'https://dashboards.create.aau.dk/webhooks/rest/webhook';
-//     //const url = 'https://dashboards.create.aau.dk/webhooks/rest/webhook';
-//     const data = {
-//       message: message
-//     };
-//     try {
-//       const response = await fetch(url, {
-//         method: 'POST',
-//         headers: {
-//           'Content-Type': 'application/json'
-//         },
-//         body: JSON.stringify(data)
-//       });
-//       if (!response.ok) {
-//         throw new Error(`HTTP error! Status: ${response.status}`);
-//       }
-//       const responseData = await response.json();
-//       const responseDataArray = responseData.messages || []
-//       console.log(response)
-//       console.log(responseData)
-//       responseData.forEach(message => {
-//         console.log(message.text);
-//         const botMessage = document.createElement("div");
-//         botMessage.classList.add("received-message");
-//         botMessage.textContent = message.text;
-//         chatContainer.appendChild(botMessage);
-//       })
-//     } catch (error) {
-//       console.error('Error:', error);
-//       // Handle the error as needed, e.g., show an error message to the user
-//     }
-//     import("./viz").then(function (viz) {
-//       viz.createLineChart()
-//     });
-//     //hide the img #overlay and remove class hidden from #viz
-//     const overlay = document.getElementById("overlay");
-//     overlay.classList.add("hidden");
-//     const chart = document.getElementById("viz");
-//     chart.classList.remove("hidden");
-//   }
-// }
-//setupEventListeners();
+async function sendMessageToRasa(message) {
+    const url = "http://localhost:5005/webhooks/rest/webhook"; //'https://dashboards.create.aau.dk/webhooks/rest/webhook';
+    //const url = 'https://dashboards.create.aau.dk/webhooks/rest/webhook';
+    const data = {
+        message: message
+    };
+    try {
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+        const responseData = await response.json();
+        // const responseDataArray = responseData.messages || []
+        console.log(response);
+        console.log(responseData);
+        responseData.forEach((message)=>{
+            console.log(message.text);
+            const botMessage = document.createElement("div");
+            botMessage.classList.add("received-message");
+            botMessage.textContent = message.text;
+            chatContainer.appendChild(botMessage);
+        });
+    } catch (error) {
+        console.error("Error:", error);
+    // Handle the error as needed, e.g., show an error message to the user
+    }
+    require("2d773bba916997e6").then(function(viz) {
+        viz.createLineChart();
+    });
+    //hide the img #overlay and remove class hidden from #viz
+    const overlay = document.getElementById("overlay");
+    overlay.classList.add("hidden");
+    const chart = document.getElementById("viz");
+    chart.classList.remove("hidden");
+}
 // async function getURL() {
 //   const url = 'https://dashboards.create.aau.dk/webhooks/rest/webhook/status';
 //   const response = await fetch(url);
@@ -780,7 +808,7 @@ const generateXAndYAxisDropdowns = ()=>{
 };
 generateXAndYAxisDropdowns();
 
-},{"8d66e6a4ba26fcab":"iRCMs","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iRCMs":[function(require,module,exports) {
+},{"8d66e6a4ba26fcab":"iRCMs","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","cors":"j1GD8","2d773bba916997e6":"aXzLB"}],"iRCMs":[function(require,module,exports) {
 module.exports = JSON.parse('{"Age":{"label":"Age","attribute_type":"Quantitative"},"Gender":{"label":"Gender","attribute_type":"Categorical"},"NIHSS":{"label":"NIHSS","attribute_type":"Quantitative"},"BP systolic":{"label":"BP systolic","attribute_type":"Quantitative"},"BP diastolic":{"label":"BP diastolic","attribute_type":"Quantitative"},"Glucose":{"label":"Glucose","attribute_type":"Quantitative"},"LDL cholesterol":{"label":"LDL cholesterol","attribute_type":"Quantitative"},"mRS 2-5":{"label":"mRS 2-5","attribute_type":"Categorical"},"COVID positive":{"label":"COVID positive","attribute_type":"Categorical_binary"},"In-hospital stroke":{"label":"In-hospital stroke","attribute_type":"Categorical_binary"},"Arrival pre-notified":{"label":"Arrival pre-notified","attribute_type":"Categorical_binary"},"Hypertension":{"label":"Hypertension","attribute_type":"Categorical_binary"},"Diabetes":{"label":"Diabetes","attribute_type":"Categorical_binary"},"Hyperlipidemia":{"label":"Hyperlipidemia","attribute_type":"Categorical_binary"},"Active smoker":{"label":"Active smoker","attribute_type":"Categorical_binary"},"Previous IS/TIA":{"label":"Previous IS/TIA","attribute_type":"Categorical_binary"},"Previous ICH":{"label":"Previous ICH","attribute_type":"Categorical_binary"},"Cor. Artery Disease / Previous MI":{"label":"Cor. Artery Disease / Previous MI","attribute_type":"Categorical_binary"},"Cong. Heart Fail":{"label":"Cong. Heart Fail","attribute_type":"Categorical_binary"},"HIV":{"label":"HIV","attribute_type":"Categorical_binary"},"Type of stroke":{"label":"Type of stroke","attribute_type":"Categorical"},"Arrival":{"label":"Arrival","attribute_type":"Quantitative"},"First received care":{"label":"First received care","attribute_type":"Quantitative"},"Hospitalized at unit":{"label":"Hospitalized at unit","attribute_type":"Categorical"},"Hospitalized at department":{"label":"Hospitalized at department","attribute_type":"Categorical"},"Anti Diabetics":{"label":"Anti Diabetics","attribute_type":"Categorical_binary"},"Anti Hypertensives":{"label":"Anti Hypertensives","attribute_type":"Categorical_binary"},"Aspirin (ASA)":{"label":"Aspirin (ASA)","attribute_type":"Categorical_binary"},"Cilostazol":{"label":"Cilostazol","attribute_type":"Categorical_binary"},"Clopidogrel":{"label":"Clopidogrel","attribute_type":"Categorical_binary"},"Ticagrelol":{"label":"Ticagrelol","attribute_type":"Categorical_binary"},"Ticlopidine":{"label":"Ticlopidine","attribute_type":"Categorical_binary"},"Prasugrel":{"label":"Prasugrel","attribute_type":"Categorical_binary"},"Dipyridamol, slow release":{"label":"Dipyridamol, slow release","attribute_type":"Categorical_binary"},"Warfarin":{"label":"Warfarin","attribute_type":"Categorical_binary"},"Low molecular weight heparin/heparin":{"label":"Low molecular weight heparin/heparin","attribute_type":"Categorical_binary"},"Dabigatran":{"label":"Dabigatran","attribute_type":"Categorical_binary"},"Rivoroxaban":{"label":"Rivoroxaban","attribute_type":"Categorical_binary"},"Apixaban":{"label":"Apixaban","attribute_type":"Categorical_binary"},"Edoxaban":{"label":"Edoxaban","attribute_type":"Categorical_binary"},"Statin":{"label":"Statin","attribute_type":"Categorical_binary"},"Ischemic stroke etiology":{"label":"Ischemic stroke etiology","attribute_type":"Categorical"},"Stroke mimics":{"label":"Stroke mimics","attribute_type":"Categorical"},"ICH volume":{"label":"ICH volume","attribute_type":"Quantitative"},"Infratentorial bleeding":{"label":"Infratentorial bleeding","attribute_type":"Categorical_binary"},"Source of bleeding found":{"label":"Source of bleeding found","attribute_type":"Categorical"},"Intraventricular bleeding":{"label":"Intraventricular bleeding","attribute_type":"Categorical_binary"},"ICH score":{"label":"ICH score","attribute_type":"Quantitative"},"Neurosurgery for ICH":{"label":"Neurosurgery for ICH","attribute_type":"Categorical_binary"},"Neurosurgery for SAH":{"label":"Neurosurgery for SAH","attribute_type":"Categorical_binary"},"ICH bleeding cause":{"label":"ICH bleeding cause","attribute_type":"Categorical"},"DVT prevention for ICH":{"label":"DVT prevention for ICH","attribute_type":"Categorical_binary"},"Hunt-Hess":{"label":"Hunt-Hess","attribute_type":"Quantitative"},"Imaging modality":{"label":"Imaging modality","attribute_type":"Categorical"},"Site of occlusion":{"label":"Site of occlusion","attribute_type":"Categorical"},"Imaging not done at all":{"label":"Imaging not done at all","attribute_type":"Categorical_binary"},"Imaging done but outside your hospital":{"label":"Imaging done but outside your hospital","attribute_type":"Categorical_binary"},"Door-to-imaging time":{"label":"Door-to-imaging time","attribute_type":"Quantitative"},"CT perfusion score":{"label":"CT perfusion score","attribute_type":"Quantitative"},"CT perfusion hypoperfusion":{"label":"CT perfusion hypoperfusion","attribute_type":"Quantitative"},"Carotid arteries imaging within 7 days after admission":{"label":"Carotid arteries imaging within 7 days after admission","attribute_type":"Categorical_binary"},"Symptomatic carotid stenosis > 70%":{"label":"Symptomatic carotid stenosis > 70%","attribute_type":"Categorical_binary"},"Symptomatic carotid stenosis 50-70%":{"label":"Symptomatic carotid stenosis 50-70%","attribute_type":"Categorical_binary"},"Number of IVT":{"label":"Number of IVT","attribute_type":"Quantitative"},"% IVT of all ischemic strokes":{"label":"% IVT of all ischemic strokes","attribute_type":"Quantitative"},"Onset-to-door time for IVT, median":{"label":"Onset-to-door time for IVT, median","attribute_type":"Quantitative"},"Door-to-needle for IVT, median":{"label":"Door-to-needle for IVT, median","attribute_type":"Quantitative"},"% MT only of all ischemic strokes":{"label":"% MT only of all ischemic strokes","attribute_type":"Quantitative"},"% IVT+MT of all ischemic strokes":{"label":"% IVT+MT of all ischemic strokes","attribute_type":"Quantitative"},"Door-to-groin for MT, median. Direct (primary transport)":{"label":"Door-to-groin for MT, median. Direct (primary transport)","attribute_type":"Quantitative"},"Door-to-groin for MT, median. Drip-and-ship (secondary transport)":{"label":"Door-to-groin for MT, median. Drip-and-ship (secondary transport)","attribute_type":"Quantitative"},"Door-in-door-out, median. For PSC, transport to CSC for MT":{"label":"Door-in-door-out, median. For PSC, transport to CSC for MT","attribute_type":"Quantitative"},"TICI scores":{"label":"TICI scores","attribute_type":"Categorical"},"Bleeding after IVT/MT":{"label":"Bleeding after IVT/MT","attribute_type":"Categorical_binary"},"Complications after MT":{"label":"Complications after MT","attribute_type":"Categorical_binary"},"DVT prevention":{"label":"DVT prevention","attribute_type":"Categorical_binary"},"Decompressive hemicraniectomy of patients >60 years and > NIHSS":{"label":"Decompressive hemicraniectomy of patients >60 years and > NIHSS","attribute_type":"Categorical_binary"},"Carotid artery imaging <= 7 days after admission":{"label":"Carotid artery imaging <= 7 days after admission","attribute_type":"Categorical_binary"},">70% internal carotid artery stenosis":{"label":">70% internal carotid artery stenosis","attribute_type":"Categorical_binary"},"Carotid endarterectomy of patients with >70% ICA stenosis":{"label":"Carotid endarterectomy of patients with >70% ICA stenosis","attribute_type":"Categorical_binary"},"Antipyretic administered for the first elevated temperature":{"label":"Antipyretic administered for the first elevated temperature","attribute_type":"Categorical_binary"},"Was insulin administered for the first elevated glucose (>=10 mmol/L)?":{"label":"Was insulin administered for the first elevated glucose (>=10 mmol/L)?","attribute_type":"Categorical_binary"},"Dysphagia screening performed before given medication/food orally":{"label":"Dysphagia screening performed before given medication/food orally","attribute_type":"Categorical_binary"},"Physiotherapy initiated <= 72 hours after admission":{"label":"Physiotherapy initiated <= 72 hours after admission","attribute_type":"Categorical_binary"},"Patient examined by occupational therapist":{"label":"Patient examined by occupational therapist","attribute_type":"Categorical_binary"},"Who performed swallowing screen":{"label":"Who performed swallowing screen","attribute_type":"Categorical"},"Reasons for not providing IVT":{"label":"Reasons for not providing IVT","attribute_type":"Categorical"},"Test for dysphagia screen":{"label":"Test for dysphagia screen","attribute_type":"Categorical"},"Warfarin for AF":{"label":"Warfarin for AF","attribute_type":"Categorical_binary"},"Low molecular weight heparin/heparin for AF":{"label":"Low molecular weight heparin/heparin for AF","attribute_type":"Categorical_binary"},"Dabigatran for AF":{"label":"Dabigatran for AF","attribute_type":"Categorical_binary"},"Rivoroxaban for AF":{"label":"Rivoroxaban for AF","attribute_type":"Categorical_binary"},"Apixaban for AF":{"label":"Apixaban for AF","attribute_type":"Categorical_binary"},"Edoxaban for AF":{"label":"Edoxaban for AF","attribute_type":"Categorical_binary"},"Statin for non-cardioembolic ischemic stroke":{"label":"Statin for non-cardioembolic ischemic stroke","attribute_type":"Categorical_binary"},"Complications":{"label":"Complications","attribute_type":"Categorical"},"Discharge destination":{"label":"Discharge destination","attribute_type":"Categorical"},"Modified ranking scale discharge":{"label":"Modified ranking scale discharge","attribute_type":"Categorical"},"Modified ranking scale 3 month":{"label":"Modified ranking scale 3 month","attribute_type":"Categorical"},"NIHSS discharge":{"label":"NIHSS discharge","attribute_type":"Quantitative"},"Patients treated with door-to-needle time <= 60 minutes":{"label":"Patients treated with door-to-needle time <= 60 minutes","attribute_type":"Categorical_binary"},"Patients treated with door-to-needle time <= 45 minutes":{"label":"Patients treated with door-to-needle time <= 45 minutes","attribute_type":"Categorical_binary"},"Patients treated with door-to-groin time <= 120 minutes":{"label":"Patients treated with door-to-groin time <= 120 minutes","attribute_type":"Categorical_binary"},"Patients treated with door-to-groin time <= 90 minutes":{"label":"Patients treated with door-to-groin time <= 90 minutes","attribute_type":"Categorical_binary"},"Recanalization rate out of total ischemic incidence":{"label":"Recanalization rate out of total ischemic incidence","attribute_type":"Quantitative"},"Suspected stroke patients undergoing CT/MRI":{"label":"Suspected stroke patients undergoing CT/MRI","attribute_type":"Categorical_binary"},"Stroke patients undergoing dysphagia screening":{"label":"Stroke patients undergoing dysphagia screening","attribute_type":"Categorical_binary"},"Ischemic stroke patients discharged with antiplatelets":{"label":"Ischemic stroke patients discharged with antiplatelets","attribute_type":"Categorical_binary"},"Atrial fibrillation patients discharged with anticoagulants":{"label":"Atrial fibrillation patients discharged with anticoagulants","attribute_type":"Categorical_binary"},"Stroke patients hospitalized in a dedicated stroke unit / ICU":{"label":"Stroke patients hospitalized in a dedicated stroke unit / ICU","attribute_type":"Categorical_binary"}}');
 
 },{}],"gkKU3":[function(require,module,exports) {
@@ -812,6 +840,449 @@ exports.export = function(dest, destName, get) {
         get: get
     });
 };
+
+},{}],"j1GD8":[function(require,module,exports) {
+(function() {
+    "use strict";
+    var assign = require("7d6f4cc4aa59d781");
+    var vary = require("a19c3ef113830b18");
+    var defaults = {
+        origin: "*",
+        methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+        preflightContinue: false,
+        optionsSuccessStatus: 204
+    };
+    function isString(s) {
+        return typeof s === "string" || s instanceof String;
+    }
+    function isOriginAllowed(origin, allowedOrigin) {
+        if (Array.isArray(allowedOrigin)) {
+            for(var i = 0; i < allowedOrigin.length; ++i){
+                if (isOriginAllowed(origin, allowedOrigin[i])) return true;
+            }
+            return false;
+        } else if (isString(allowedOrigin)) return origin === allowedOrigin;
+        else if (allowedOrigin instanceof RegExp) return allowedOrigin.test(origin);
+        else return !!allowedOrigin;
+    }
+    function configureOrigin(options, req) {
+        var requestOrigin = req.headers.origin, headers = [], isAllowed;
+        if (!options.origin || options.origin === "*") // allow any origin
+        headers.push([
+            {
+                key: "Access-Control-Allow-Origin",
+                value: "*"
+            }
+        ]);
+        else if (isString(options.origin)) {
+            // fixed origin
+            headers.push([
+                {
+                    key: "Access-Control-Allow-Origin",
+                    value: options.origin
+                }
+            ]);
+            headers.push([
+                {
+                    key: "Vary",
+                    value: "Origin"
+                }
+            ]);
+        } else {
+            isAllowed = isOriginAllowed(requestOrigin, options.origin);
+            // reflect origin
+            headers.push([
+                {
+                    key: "Access-Control-Allow-Origin",
+                    value: isAllowed ? requestOrigin : false
+                }
+            ]);
+            headers.push([
+                {
+                    key: "Vary",
+                    value: "Origin"
+                }
+            ]);
+        }
+        return headers;
+    }
+    function configureMethods(options) {
+        var methods = options.methods;
+        if (methods.join) methods = options.methods.join(","); // .methods is an array, so turn it into a string
+        return {
+            key: "Access-Control-Allow-Methods",
+            value: methods
+        };
+    }
+    function configureCredentials(options) {
+        if (options.credentials === true) return {
+            key: "Access-Control-Allow-Credentials",
+            value: "true"
+        };
+        return null;
+    }
+    function configureAllowedHeaders(options, req) {
+        var allowedHeaders = options.allowedHeaders || options.headers;
+        var headers = [];
+        if (!allowedHeaders) {
+            allowedHeaders = req.headers["access-control-request-headers"]; // .headers wasn't specified, so reflect the request headers
+            headers.push([
+                {
+                    key: "Vary",
+                    value: "Access-Control-Request-Headers"
+                }
+            ]);
+        } else if (allowedHeaders.join) allowedHeaders = allowedHeaders.join(","); // .headers is an array, so turn it into a string
+        if (allowedHeaders && allowedHeaders.length) headers.push([
+            {
+                key: "Access-Control-Allow-Headers",
+                value: allowedHeaders
+            }
+        ]);
+        return headers;
+    }
+    function configureExposedHeaders(options) {
+        var headers = options.exposedHeaders;
+        if (!headers) return null;
+        else if (headers.join) headers = headers.join(","); // .headers is an array, so turn it into a string
+        if (headers && headers.length) return {
+            key: "Access-Control-Expose-Headers",
+            value: headers
+        };
+        return null;
+    }
+    function configureMaxAge(options) {
+        var maxAge = (typeof options.maxAge === "number" || options.maxAge) && options.maxAge.toString();
+        if (maxAge && maxAge.length) return {
+            key: "Access-Control-Max-Age",
+            value: maxAge
+        };
+        return null;
+    }
+    function applyHeaders(headers, res) {
+        for(var i = 0, n = headers.length; i < n; i++){
+            var header = headers[i];
+            if (header) {
+                if (Array.isArray(header)) applyHeaders(header, res);
+                else if (header.key === "Vary" && header.value) vary(res, header.value);
+                else if (header.value) res.setHeader(header.key, header.value);
+            }
+        }
+    }
+    function cors(options, req, res, next) {
+        var headers = [], method = req.method && req.method.toUpperCase && req.method.toUpperCase();
+        if (method === "OPTIONS") {
+            // preflight
+            headers.push(configureOrigin(options, req));
+            headers.push(configureCredentials(options, req));
+            headers.push(configureMethods(options, req));
+            headers.push(configureAllowedHeaders(options, req));
+            headers.push(configureMaxAge(options, req));
+            headers.push(configureExposedHeaders(options, req));
+            applyHeaders(headers, res);
+            if (options.preflightContinue) next();
+            else {
+                // Safari (and potentially other browsers) need content-length 0,
+                //   for 204 or they just hang waiting for a body
+                res.statusCode = options.optionsSuccessStatus;
+                res.setHeader("Content-Length", "0");
+                res.end();
+            }
+        } else {
+            // actual response
+            headers.push(configureOrigin(options, req));
+            headers.push(configureCredentials(options, req));
+            headers.push(configureExposedHeaders(options, req));
+            applyHeaders(headers, res);
+            next();
+        }
+    }
+    function middlewareWrapper(o) {
+        // if options are static (either via defaults or custom options passed in), wrap in a function
+        var optionsCallback = null;
+        if (typeof o === "function") optionsCallback = o;
+        else optionsCallback = function(req, cb) {
+            cb(null, o);
+        };
+        return function corsMiddleware(req, res, next) {
+            optionsCallback(req, function(err, options) {
+                if (err) next(err);
+                else {
+                    var corsOptions = assign({}, defaults, options);
+                    var originCallback = null;
+                    if (corsOptions.origin && typeof corsOptions.origin === "function") originCallback = corsOptions.origin;
+                    else if (corsOptions.origin) originCallback = function(origin, cb) {
+                        cb(null, corsOptions.origin);
+                    };
+                    if (originCallback) originCallback(req.headers.origin, function(err2, origin) {
+                        if (err2 || !origin) next(err2);
+                        else {
+                            corsOptions.origin = origin;
+                            cors(corsOptions, req, res, next);
+                        }
+                    });
+                    else next();
+                }
+            });
+        };
+    }
+    // can pass either an options hash, an options delegate, or nothing
+    module.exports = middlewareWrapper;
+})();
+
+},{"7d6f4cc4aa59d781":"7OXxh","a19c3ef113830b18":"lFBRS"}],"7OXxh":[function(require,module,exports) {
+/*
+object-assign
+(c) Sindre Sorhus
+@license MIT
+*/ "use strict";
+/* eslint-disable no-unused-vars */ var getOwnPropertySymbols = Object.getOwnPropertySymbols;
+var hasOwnProperty = Object.prototype.hasOwnProperty;
+var propIsEnumerable = Object.prototype.propertyIsEnumerable;
+function toObject(val) {
+    if (val === null || val === undefined) throw new TypeError("Object.assign cannot be called with null or undefined");
+    return Object(val);
+}
+function shouldUseNative() {
+    try {
+        if (!Object.assign) return false;
+        // Detect buggy property enumeration order in older V8 versions.
+        // https://bugs.chromium.org/p/v8/issues/detail?id=4118
+        var test1 = new String("abc"); // eslint-disable-line no-new-wrappers
+        test1[5] = "de";
+        if (Object.getOwnPropertyNames(test1)[0] === "5") return false;
+        // https://bugs.chromium.org/p/v8/issues/detail?id=3056
+        var test2 = {};
+        for(var i = 0; i < 10; i++)test2["_" + String.fromCharCode(i)] = i;
+        var order2 = Object.getOwnPropertyNames(test2).map(function(n) {
+            return test2[n];
+        });
+        if (order2.join("") !== "0123456789") return false;
+        // https://bugs.chromium.org/p/v8/issues/detail?id=3056
+        var test3 = {};
+        "abcdefghijklmnopqrst".split("").forEach(function(letter) {
+            test3[letter] = letter;
+        });
+        if (Object.keys(Object.assign({}, test3)).join("") !== "abcdefghijklmnopqrst") return false;
+        return true;
+    } catch (err) {
+        // We don't expect any of the above to throw, but better to be safe.
+        return false;
+    }
+}
+module.exports = shouldUseNative() ? Object.assign : function(target, source) {
+    var from;
+    var to = toObject(target);
+    var symbols;
+    for(var s = 1; s < arguments.length; s++){
+        from = Object(arguments[s]);
+        for(var key in from)if (hasOwnProperty.call(from, key)) to[key] = from[key];
+        if (getOwnPropertySymbols) {
+            symbols = getOwnPropertySymbols(from);
+            for(var i = 0; i < symbols.length; i++)if (propIsEnumerable.call(from, symbols[i])) to[symbols[i]] = from[symbols[i]];
+        }
+    }
+    return to;
+};
+
+},{}],"lFBRS":[function(require,module,exports) {
+/*!
+ * vary
+ * Copyright(c) 2014-2017 Douglas Christopher Wilson
+ * MIT Licensed
+ */ "use strict";
+/**
+ * Module exports.
+ */ module.exports = vary;
+module.exports.append = append;
+/**
+ * RegExp to match field-name in RFC 7230 sec 3.2
+ *
+ * field-name    = token
+ * token         = 1*tchar
+ * tchar         = "!" / "#" / "$" / "%" / "&" / "'" / "*"
+ *               / "+" / "-" / "." / "^" / "_" / "`" / "|" / "~"
+ *               / DIGIT / ALPHA
+ *               ; any VCHAR, except delimiters
+ */ var FIELD_NAME_REGEXP = /^[!#$%&'*+\-.^_`|~0-9A-Za-z]+$/;
+/**
+ * Append a field to a vary header.
+ *
+ * @param {String} header
+ * @param {String|Array} field
+ * @return {String}
+ * @public
+ */ function append(header, field) {
+    if (typeof header !== "string") throw new TypeError("header argument is required");
+    if (!field) throw new TypeError("field argument is required");
+    // get fields array
+    var fields = !Array.isArray(field) ? parse(String(field)) : field;
+    // assert on invalid field names
+    for(var j = 0; j < fields.length; j++){
+        if (!FIELD_NAME_REGEXP.test(fields[j])) throw new TypeError("field argument contains an invalid header name");
+    }
+    // existing, unspecified vary
+    if (header === "*") return header;
+    // enumerate current values
+    var val = header;
+    var vals = parse(header.toLowerCase());
+    // unspecified vary
+    if (fields.indexOf("*") !== -1 || vals.indexOf("*") !== -1) return "*";
+    for(var i = 0; i < fields.length; i++){
+        var fld = fields[i].toLowerCase();
+        // append value (case-preserving)
+        if (vals.indexOf(fld) === -1) {
+            vals.push(fld);
+            val = val ? val + ", " + fields[i] : fields[i];
+        }
+    }
+    return val;
+}
+/**
+ * Parse a vary header into an array.
+ *
+ * @param {String} header
+ * @return {Array}
+ * @private
+ */ function parse(header) {
+    var end = 0;
+    var list = [];
+    var start = 0;
+    // gather tokens
+    for(var i = 0, len = header.length; i < len; i++)switch(header.charCodeAt(i)){
+        case 0x20:
+            /*   */ if (start === end) start = end = i + 1;
+            break;
+        case 0x2c:
+            /* , */ list.push(header.substring(start, end));
+            start = end = i + 1;
+            break;
+        default:
+            end = i + 1;
+            break;
+    }
+    // final token
+    list.push(header.substring(start, end));
+    return list;
+}
+/**
+ * Mark that a request is varied on a header field.
+ *
+ * @param {Object} res
+ * @param {String|Array} field
+ * @public
+ */ function vary(res, field) {
+    if (!res || !res.getHeader || !res.setHeader) // quack quack
+    throw new TypeError("res argument is required");
+    // get existing header
+    var val = res.getHeader("Vary") || "";
+    var header = Array.isArray(val) ? val.join(", ") : String(val);
+    // set new header
+    if (val = append(header, field)) res.setHeader("Vary", val);
+}
+
+},{}],"aXzLB":[function(require,module,exports) {
+module.exports = require("5bf27e11bd6e4ca5")(require("172d5feef6c8e54d").getBundleURL("4EIhp") + "viz.b2f83f57.js" + "?" + Date.now()).catch((err)=>{
+    delete module.bundle.cache[module.id];
+    throw err;
+}).then(()=>module.bundle.root("dNh3d"));
+
+},{"5bf27e11bd6e4ca5":"61B45","172d5feef6c8e54d":"lgJ39"}],"61B45":[function(require,module,exports) {
+"use strict";
+var cacheLoader = require("ca2a84f7fa4a3bb0");
+module.exports = cacheLoader(function(bundle) {
+    return new Promise(function(resolve, reject) {
+        // Don't insert the same script twice (e.g. if it was already in the HTML)
+        var existingScripts = document.getElementsByTagName("script");
+        if ([].concat(existingScripts).some(function isCurrentBundle(script) {
+            return script.src === bundle;
+        })) {
+            resolve();
+            return;
+        }
+        var preloadLink = document.createElement("link");
+        preloadLink.href = bundle;
+        preloadLink.rel = "preload";
+        preloadLink.as = "script";
+        document.head.appendChild(preloadLink);
+        var script = document.createElement("script");
+        script.async = true;
+        script.type = "text/javascript";
+        script.src = bundle;
+        script.onerror = function(e) {
+            var error = new TypeError("Failed to fetch dynamically imported module: ".concat(bundle, ". Error: ").concat(e.message));
+            script.onerror = script.onload = null;
+            script.remove();
+            reject(error);
+        };
+        script.onload = function() {
+            script.onerror = script.onload = null;
+            resolve();
+        };
+        document.getElementsByTagName("head")[0].appendChild(script);
+    });
+});
+
+},{"ca2a84f7fa4a3bb0":"j49pS"}],"j49pS":[function(require,module,exports) {
+"use strict";
+var cachedBundles = {};
+var cachedPreloads = {};
+var cachedPrefetches = {};
+function getCache(type) {
+    switch(type){
+        case "preload":
+            return cachedPreloads;
+        case "prefetch":
+            return cachedPrefetches;
+        default:
+            return cachedBundles;
+    }
+}
+module.exports = function(loader, type) {
+    return function(bundle) {
+        var cache = getCache(type);
+        if (cache[bundle]) return cache[bundle];
+        return cache[bundle] = loader.apply(null, arguments).catch(function(e) {
+            delete cache[bundle];
+            throw e;
+        });
+    };
+};
+
+},{}],"lgJ39":[function(require,module,exports) {
+"use strict";
+var bundleURL = {};
+function getBundleURLCached(id) {
+    var value = bundleURL[id];
+    if (!value) {
+        value = getBundleURL();
+        bundleURL[id] = value;
+    }
+    return value;
+}
+function getBundleURL() {
+    try {
+        throw new Error();
+    } catch (err) {
+        var matches = ("" + err.stack).match(/(https?|file|ftp|(chrome|moz|safari-web)-extension):\/\/[^)\n]+/g);
+        if (matches) // The first two stack frames will be this function and getBundleURLCached.
+        // Use the 3rd one, which will be a runtime in the original bundle.
+        return getBaseURL(matches[2]);
+    }
+    return "/";
+}
+function getBaseURL(url) {
+    return ("" + url).replace(/^((?:https?|file|ftp|(chrome|moz|safari-web)-extension):\/\/.+)\/[^/]+$/, "$1") + "/";
+}
+// TODO: Replace uses with `new URL(url).origin` when ie11 is no longer supported.
+function getOrigin(url) {
+    var matches = ("" + url).match(/(https?|file|ftp|(chrome|moz|safari-web)-extension):\/\/[^/]+/);
+    if (!matches) throw new Error("Origin not found");
+    return matches[0];
+}
+exports.getBundleURL = getBundleURLCached;
+exports.getBaseURL = getBaseURL;
+exports.getOrigin = getOrigin;
 
 },{}]},["1ZN8K","7LLTF"], "7LLTF", "parcelRequirefe81")
 

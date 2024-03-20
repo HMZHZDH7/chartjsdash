@@ -67,7 +67,6 @@ export async function createLineChart() {
       animation: {
         onComplete: function () {
           let base = chart.toBase64Image();
-          console.log(base);
           for (let i = 0; i < allChartsThatWeHaveSaved.length; i++) {
             if (allChartsThatWeHaveSaved[i] === chart) {
               return;

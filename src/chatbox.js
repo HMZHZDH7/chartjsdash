@@ -1,8 +1,14 @@
+import e from 'cors';
+
 // chatbox.js
 const xy = require('../data/hobbit.json')
 let yAxis = 'Age'
 let xAxis = 'Gender';
 let plotType = 'line';
+let trendLineChecked = false;
+let errorBarChecked = false;
+let nationalValuesChecked = false;
+let selectedHospitals = [];
 
 
 async function setupEventListeners() {
@@ -22,26 +28,62 @@ async function setupEventListeners() {
       showImage(thumbnails[i]);
     });
   }
+
   const yAxisSelect = document.getElementById("y-axis-select");
   yAxisSelect.addEventListener("change", (event) => {
     yAxis = event.target.value
-    // TODO: send to RASA
+    //sendMessageToRasa('y-axis: ' + yAxis)
   });
   const xAxisSelect = document.getElementById("x-axis-select");
   xAxisSelect.addEventListener("change", (event) => {
     xAxis = event.target.value
-    // TODO: send to RASA
+    //sendMessageToRasa('x-axis: ' + xAxis)
   });
   const plotTypeSelect = document.getElementById("plot-type-select");
   plotTypeSelect.addEventListener("change", (event) => {
     plotType = event.target.value
-    // TODO: send to RASA
+    //sendMessageToRasa('plot-type: ' + plotType)
   });
   const trendLine = document.getElementById("trend-line");
   trendLine.addEventListener("change", (event) => {
-    trendLineActive = event.target.value
-    console.log(trendLineActive.checked)
-    // TODO: send to RASA
+    if (trendLine.checked === true) {
+      trendLineChecked = true;
+    } else {
+      trendLineChecked = false;
+    }
+    //sendMessageToRasa('trend-line: ' + trendLineChecked)
+  });
+  const errorBar = document.getElementById("error-bar");
+  errorBar.addEventListener("change", (event) => {
+    if (errorBar.checked === true) {
+      errorBarChecked = true;
+    } else {
+      errorBarChecked = false;
+    }
+    //sendMessageToRasa('error-bar: ' + errorBarChecked)
+  });
+  const nationalValues = document.getElementById("national-values");
+  nationalValues.addEventListener("change", (event) => {
+    if (nationalValues.checked === true) {
+      nationalValuesChecked = true;
+    } else {
+      nationalValuesChecked = false;
+    }
+    //sendMessageToRasa('national-values: ' + nationalValuesChecked)
+  });
+
+  const hospitalComparison = document.getElementById("hospital-select");
+  hospitalComparison.addEventListener("change", (event) => {
+    selectedHospitals = Array.from(hospitalComparison.options)
+      .filter(option => option.selected)
+      .map(option => option.value);
+    if (selectedHospitals.includes('None')) {
+      console.log("None selected")
+      selectedHospitals = ['None']
+    } else {
+      console.log(selectedHospitals)
+    }
+    //sendMessageToRasa('compare with hospitals: ' + selectedHospitals)
   });
 };
 
@@ -141,6 +183,9 @@ async function sendMessage() {
 
     messageInput.value = "";
 
+    // Send message to Rasa
+    // sendMessageToRasa(message);
+
     // Bot message
     const botMessage = document.createElement("p");
     botMessage.classList.add("received-message");
@@ -158,54 +203,52 @@ async function sendMessage() {
   }
 }
 
-//     const url = 'http://localhost:5005/webhooks/rest/webhook';//'https://dashboards.create.aau.dk/webhooks/rest/webhook';
-//     //const url = 'https://dashboards.create.aau.dk/webhooks/rest/webhook';
-//     const data = {
-//       message: message
-//     };
+async function sendMessageToRasa(message) {
+  const url = 'http://localhost:5005/webhooks/rest/webhook';//'https://dashboards.create.aau.dk/webhooks/rest/webhook';
+  //const url = 'https://dashboards.create.aau.dk/webhooks/rest/webhook';
+  const data = {
+    message: message
+  };
 
-//     try {
-//       const response = await fetch(url, {
-//         method: 'POST',
-//         headers: {
-//           'Content-Type': 'application/json'
-//         },
-//         body: JSON.stringify(data)
-//       });
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
 
-//       if (!response.ok) {
-//         throw new Error(`HTTP error! Status: ${response.status}`);
-//       }
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
 
-//       const responseData = await response.json();
-//       const responseDataArray = responseData.messages || []
-//       console.log(response)
-//       console.log(responseData)
+    const responseData = await response.json();
+    // const responseDataArray = responseData.messages || []
+    console.log(response)
+    console.log(responseData)
 
-//       responseData.forEach(message => {
-//         console.log(message.text);
-//         const botMessage = document.createElement("div");
-//         botMessage.classList.add("received-message");
-//         botMessage.textContent = message.text;
-//         chatContainer.appendChild(botMessage);
-//       })
-//     } catch (error) {
-//       console.error('Error:', error);
-//       // Handle the error as needed, e.g., show an error message to the user
-//     }
-//     import("./viz").then(function (viz) {
-//       viz.createLineChart()
-//     });
+    responseData.forEach(message => {
+      console.log(message.text);
+      const botMessage = document.createElement("div");
+      botMessage.classList.add("received-message");
+      botMessage.textContent = message.text;
+      chatContainer.appendChild(botMessage);
+    })
+  } catch (error) {
+    console.error('Error:', error);
+    // Handle the error as needed, e.g., show an error message to the user
+  }
+  import("./viz").then(function (viz) {
+    viz.createLineChart()
+  });
 
-//     //hide the img #overlay and remove class hidden from #viz
-//     const overlay = document.getElementById("overlay");
-//     overlay.classList.add("hidden");
-//     const chart = document.getElementById("viz");
-//     chart.classList.remove("hidden");
-//   }
-// }
-
-//setupEventListeners();
+  //hide the img #overlay and remove class hidden from #viz
+  const overlay = document.getElementById("overlay");
+  overlay.classList.add("hidden");
+  const chart = document.getElementById("viz");
+  chart.classList.remove("hidden");
+}
 
 
 
