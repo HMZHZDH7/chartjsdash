@@ -610,6 +610,8 @@ async function createLineChart() {
     const values = data.map((item)=>item.Value);
     // Creating a line chart
     const ctx = document.getElementById("viz");
+    ctx.width = ctx.clientWidth; // Set canvas width to its client width
+    ctx.height = ctx.clientHeight; // Set canvas height to its client height
     let chartStatus = (0, _autoDefault.default).getChart(ctx);
     if (chartStatus !== undefined) chartStatus.destroy();
     const chart = new (0, _autoDefault.default)(ctx, {
@@ -669,6 +671,7 @@ async function saveChartAsPng(chart) {
 }
 async function fetchData(filename) {
     return fetch("http://localhost:4000/data-webhook", {
+        //return fetch('https://dashboards.create.aau.dk/data-webhook', {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -687,7 +690,7 @@ async function fetchData(filename) {
 // Fetch data from data.json and create the chart
 createLineChart().then((r)=>console.log("Chart created"));
 
-},{"chart.js/auto":"d8NN9","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./chatbox.js":"7LLTF"}],"d8NN9":[function(require,module,exports) {
+},{"./chatbox.js":"7LLTF","chart.js/auto":"d8NN9","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"d8NN9":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _chartJs = require("../dist/chart.js");
