@@ -514,37 +514,37 @@ body {
 .gallery-image {
   height: 70%;
   background: white;
-  margin: 0 4px;
+  margin: 45px 4px 0px 0px;
   object-fit: cover;
   cursor: pointer;
+  transform: rotateX(180deg);
 }
 
 #gallery-container {
   display: flex;
   flex-direction: row;
-  align-items: top;
   justify-content: start;
   width: 100%;
-  padding: 20px 0 0 0;
+  margin: 0px 0 0 0;
   height: 100%;
   overflow-x: auto;
+  white-space: nowrap;
+  transform: rotateX(180deg);
 }
 
 .thumbnail-selected {
   border: 2px solid #e2476e;
 }
 
-/* #overlay {
-  position: absolute;
-  display: none;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-} */
 
 .hidden {
   display: none;
+}
+
+#hospital-select {
+  width: 100%;
+  padding: 3px;
+  margin: 10px 0;
+  font-size: 16px;
+  cursor: pointer;
 }
