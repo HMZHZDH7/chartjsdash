@@ -1,4 +1,8 @@
 {
+    "Time": {
+        "label": "Time",
+        "attribute_type": "Quantitative"
+    },
     "Age": {
         "label": "Age",
         "attribute_type": "Quantitative"

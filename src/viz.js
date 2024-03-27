@@ -13,18 +13,28 @@ export async function createLineChart() {
   let data
   let args
 
-  await fetchData()
-    .then(fetched_data => {
-      data = fetched_data.data;
-      args = fetched_data.args;
-    })
-    .catch(error => {
-      console.error('Error fetching data:', error);
-    });
+  // await fetchData()
+  //   .then(fetched_data => {
+  //     data = fetched_data.data;
+  //     args = fetched_data.args;
+  //   })
+  //   .catch(error => {
+  //     console.error('Error fetching data:', error);
+  //   });
+
+  try {
+    const fetched_data = await fetchData();
+    data = fetched_data.data;
+    args = fetched_data.args;
+  } catch (error) {
+    console.log(error)
+  }
 
 
   const labels = data.map(item => item.YQ);
   const values = data.map(item => item.Value);
+
+  setupXYFiltering(labels, values);
 
   // Creating a line chart
   const ctx = document.getElementById('viz');
@@ -116,6 +126,50 @@ async function fetchData(filename) {
       console.error('There was a problem fetching JSON data:', error);
       throw error;
     });
+}
+
+const setupXYFiltering = (x, y) => {
+  const xMinInput = document.getElementById("min-x");
+  const xMaxInput = document.getElementById("max-x");
+  const yMinInput = document.getElementById("min-y");
+  const yMaxInput = document.getElementById("max-y");
+  const submitX = document.getElementById("submit-x");
+  const submitY = document.getElementById("submit-y");
+
+  // Check if x and y are numbers, if yes, find the min and max and set the range
+  // if its a string with the values male, female then make it a dropdown
+  // if it is a string with the values of the YQ then make it a dropdown
+
+  // Check if x and y are numbers
+  if (x.some(val => !isNaN(val))) {
+    const xMin = Math.min(...x);
+    const xMax = Math.max(...x);
+    xMinInput.min = xMin;
+    xMinInput.max = xMax;
+    xMaxInput.max = xMax;
+    xMaxInput.min = xMin;
+  } else {
+    submitX.disabled = true;
+    xMinInput.disabled = true;
+    xMaxInput.disabled = true;
+  }
+
+  if (y.some(val => !isNaN(val))) {
+    const yMin = Math.min(...y);
+    const yMax = Math.max(...y);
+    console.log('hello' + yMin)
+    console.log(yMax)
+    yMinInput.min = yMin;
+    yMinInput.max = yMax;
+    yMaxInput.max = yMax;
+    yMaxInput.min = yMin;
+  } else {
+    submitY.disabled = true;
+    yMinInput.disabled = true;
+    yMaxInput.disabled = true;
+  }
+
+
 }
 
 // Fetch data from data.json and create the chart

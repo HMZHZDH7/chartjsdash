@@ -505,9 +505,9 @@ body {
   display: flex;
   flex-direction: column;
   align-items: start;
-  padding: 10px;
+  padding: 0 10px;
   cursor: pointer;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   height: 100%;
 }
 
@@ -547,4 +547,35 @@ body {
   margin: 10px 0;
   font-size: 16px;
   cursor: pointer;
+}
+
+#min-y {
+  width: 4em;
+}
+
+#max-y {
+  width: 4em;
+}
+
+#max-x {
+  width: 4em;
+}
+
+#min-x {
+  width: 4em;
+}
+
+.axis-menu {
+  display: flex;
+  flex-direction: row;
+}
+
+input:invalid+span::after {
+  content: "✖";
+  padding-left: 5px;
+}
+
+input:valid+span::after {
+  content: "✓";
+  padding-left: 5px;
 }
