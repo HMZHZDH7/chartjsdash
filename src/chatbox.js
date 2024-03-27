@@ -9,7 +9,10 @@ let trendLineChecked = false;
 let errorBarChecked = false;
 let nationalValuesChecked = false;
 let selectedHospitals = [];
-
+let minX = 0;
+let maxX = 0;
+let minY = 0;
+let maxY = 0;
 
 async function setupEventListeners() {
   const messageInput = document.getElementById("input");
@@ -32,17 +35,17 @@ async function setupEventListeners() {
   const yAxisSelect = document.getElementById("y-axis-select");
   yAxisSelect.addEventListener("change", (event) => {
     yAxis = event.target.value
-    //sendMessageToRasa('y-axis: ' + yAxis)
+    sendMessageToRasa('y-axis: ' + yAxis)
   });
   const xAxisSelect = document.getElementById("x-axis-select");
   xAxisSelect.addEventListener("change", (event) => {
     xAxis = event.target.value
-    //sendMessageToRasa('x-axis: ' + xAxis)
+    sendMessageToRasa('x-axis: ' + xAxis)
   });
   const plotTypeSelect = document.getElementById("plot-type-select");
   plotTypeSelect.addEventListener("change", (event) => {
     plotType = event.target.value
-    //sendMessageToRasa('plot-type: ' + plotType)
+    sendMessageToRasa('plot-type: ' + plotType)
   });
   const trendLine = document.getElementById("trend-line");
   trendLine.addEventListener("change", (event) => {
@@ -51,7 +54,7 @@ async function setupEventListeners() {
     } else {
       trendLineChecked = false;
     }
-    //sendMessageToRasa('trend-line: ' + trendLineChecked)
+    sendMessageToRasa('trend-line: ' + trendLineChecked)
   });
   const errorBar = document.getElementById("error-bar");
   errorBar.addEventListener("change", (event) => {
@@ -60,7 +63,7 @@ async function setupEventListeners() {
     } else {
       errorBarChecked = false;
     }
-    //sendMessageToRasa('error-bar: ' + errorBarChecked)
+    sendMessageToRasa('error-bar: ' + errorBarChecked)
   });
   const nationalValues = document.getElementById("national-values");
   nationalValues.addEventListener("change", (event) => {
@@ -69,7 +72,7 @@ async function setupEventListeners() {
     } else {
       nationalValuesChecked = false;
     }
-    //sendMessageToRasa('national-values: ' + nationalValuesChecked)
+    sendMessageToRasa('national-values: ' + nationalValuesChecked)
   });
 
   const hospitalComparison = document.getElementById("hospital-select");
@@ -83,7 +86,29 @@ async function setupEventListeners() {
     } else {
       console.log(selectedHospitals)
     }
-    //sendMessageToRasa('compare with hospitals: ' + selectedHospitals)
+    sendMessageToRasa('compare with hospitals: ' + selectedHospitals)
+  });
+
+  const submitButton = document.getElementById("submit-y");
+  submitButton.addEventListener("click", () => {
+    minY = document.getElementById("min-y").value;
+    maxY = document.getElementById("max-y").value;
+    if (minY == '' || maxY == '') {
+      console.log('Fill it in first dumbass!')
+      return
+    }
+    sendMessageToRasa('min y: ' + minY + ' max y: ' + maxY)
+  });
+
+  const submitXButton = document.getElementById("submit-x");
+  submitXButton.addEventListener("click", () => {
+    minX = document.getElementById("min-x").value;
+    maxX = document.getElementById("max-x").value;
+    if (minX == '' || maxX == '') {
+      console.log('Fill it in first dumbass!')
+      return
+    }
+    sendMessageToRasa('min x: ' + minX + ' max x: ' + maxX)
   });
 };
 
@@ -184,28 +209,28 @@ async function sendMessage() {
     messageInput.value = "";
 
     // Send message to Rasa
-    // sendMessageToRasa(message);
+    sendMessageToRasa(message, chatContainer);
 
     // Bot message
-    const botMessage = document.createElement("p");
-    botMessage.classList.add("received-message");
-    botMessage.textContent = "I am a bot";
+    //   const botMessage = document.createElement("p");
+    //   botMessage.classList.add("received-message");
+    //   botMessage.textContent = "I am a bot";
 
-    const botMessengerID = document.createElement("p");
-    botMessengerID.classList.add("chatbot-id");
-    botMessengerID.textContent = "Chatbot:";
+    //   const botMessengerID = document.createElement("p");
+    //   botMessengerID.classList.add("chatbot-id");
+    //   botMessengerID.textContent = "Chatbot:";
 
-    chatbotMessageContainer.appendChild(botMessengerID);
-    chatbotMessageContainer.appendChild(botMessage);
+    //   chatbotMessageContainer.appendChild(botMessengerID);
+    //   chatbotMessageContainer.appendChild(botMessage);
 
-    chatContainer.appendChild(chatbotMessageContainer);
-    return
+    //   chatContainer.appendChild(chatbotMessageContainer);
+    //   return
   }
 }
 
-async function sendMessageToRasa(message) {
-  const url = 'http://localhost:5005/webhooks/rest/webhook';//'https://dashboards.create.aau.dk/webhooks/rest/webhook';
-  //const url = 'https://dashboards.create.aau.dk/webhooks/rest/webhook';
+async function sendMessageToRasa(message, chatContainer) {
+  //const url = 'http://localhost:5005/webhooks/rest/webhook';//'https://dashboards.create.aau.dk/webhooks/rest/webhook';
+  const url = 'https://dashboards.create.aau.dk/webhooks/rest/webhook';
   const data = {
     message: message
   };

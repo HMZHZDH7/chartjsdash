@@ -85,33 +85,51 @@
                 <input type="checkbox" id="national-values" name="national-values" />
                 <label for="national-values">Show national values</label>
               </div>
-              <label for="hospital-select">Compare with hospital:</label>
-              <select name="hospital" id="hospital-select" multiple>
-                <option value="None">None</option>
-                <option value="Riverside">Riverside</option>
-                <option value="Horizon">Horizon</option>
-                <option value="Evergreen">Evergreen</option>
-                <option value="Summit">Summit</option>
-                <option value="Pineview">Pineview</option>
-                <option value="WellSpring">WellSpring</option>
-                <option value="Vitality">Vitality</option>
-                <option value="Alpha">Alpha</option>
-                <option value="Aurora">Aurora</option>
-              </select>
+              <div>
+                <label for="hospital-select">Compare with hospital:</label>
+                <select name="hospital" id="hospital-select" multiple>
+                  <option value="None">None</option>
+                  <option value="Riverside">Riverside</option>
+                  <option value="Horizon">Horizon</option>
+                  <option value="Evergreen">Evergreen</option>
+                  <option value="Summit">Summit</option>
+                  <option value="Pineview">Pineview</option>
+                  <option value="WellSpring">WellSpring</option>
+                  <option value="Vitality">Vitality</option>
+                  <option value="Alpha">Alpha</option>
+                  <option value="Aurora">Aurora</option>
+                </select>
+              </div>
             </div>
 
             <div class="menu-items">
-              <div>
-                <p>Filter y-axis:</p>
+              <p>Filter y-axis:</p>
+              <div class="axis-menu">
                 <div>
-                  <input type="range" id="volume" name="volume" min="0" max="11" />
-                  <label for="volume">Volume</label>
+                  <label for="min-y">Min:</label>
+                  <input type="number" id="min-y" name="min-y" required />
+                  <span class="validity"></span>
                 </div>
-                <p>Filter x-axis:</p>
                 <div>
-                  <input type="range" id="volume" name="volume" min="0" max="11" />
-                  <label for="volume">Volume</label>
+                  <label for="max-y">Max:</label>
+                  <input type="number" id="max-y" name="max-y" required />
+                  <span class="validity"></span>
                 </div>
+                <input type="submit" id="submit-y" />
+              </div>
+              <p>Filter x-axis:</p>
+              <div class="axis-menu">
+                <div>
+                  <label for="min-x">Min:</label>
+                  <input type="number" id="min-x" name="min-x" required>
+                  <span class="validity"></span>
+                </div>
+                <div>
+                  <label for="max-x">Max:</label>
+                  <input type="number" id="max-x" name="max-x" required />
+                  <span class="validity"></span>
+                </div>
+                <input type="submit" id="submit-x" />
               </div>
             </div>
           </div>

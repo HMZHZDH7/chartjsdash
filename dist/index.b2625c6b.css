@@ -349,10 +349,9 @@ body {
 .menu-items {
   cursor: pointer;
   flex-direction: column;
-  justify-content: space-between;
   align-items: start;
   height: 100%;
-  padding: 10px;
+  padding: 0 10px;
   display: flex;
 }
 
@@ -391,5 +390,24 @@ body {
   margin: 10px 0;
   padding: 3px;
   font-size: 16px;
+}
+
+#min-y, #max-y, #max-x, #min-x {
+  width: 4em;
+}
+
+.axis-menu {
+  flex-direction: row;
+  display: flex;
+}
+
+input:invalid + span:after {
+  content: "✖";
+  padding-left: 5px;
+}
+
+input:valid + span:after {
+  content: "✓";
+  padding-left: 5px;
 }
 /*# sourceMappingURL=index.b2625c6b.css.map */
