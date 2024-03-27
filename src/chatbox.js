@@ -184,26 +184,26 @@ async function sendMessage() {
     messageInput.value = "";
 
     // Send message to Rasa
-    // sendMessageToRasa(message);
+    sendMessageToRasa(message, chatContainer);
 
     // Bot message
-    const botMessage = document.createElement("p");
-    botMessage.classList.add("received-message");
-    botMessage.textContent = "I am a bot";
-
-    const botMessengerID = document.createElement("p");
-    botMessengerID.classList.add("chatbot-id");
-    botMessengerID.textContent = "Chatbot:";
-
-    chatbotMessageContainer.appendChild(botMessengerID);
-    chatbotMessageContainer.appendChild(botMessage);
-
-    chatContainer.appendChild(chatbotMessageContainer);
-    return
+    // const botMessage = document.createElement("p");
+    // botMessage.classList.add("received-message");
+    // botMessage.textContent = "I am a bot";
+    //
+    // const botMessengerID = document.createElement("p");
+    // botMessengerID.classList.add("chatbot-id");
+    // botMessengerID.textContent = "Chatbot:";
+    //
+    // chatbotMessageContainer.appendChild(botMessengerID);
+    // chatbotMessageContainer.appendChild(botMessage);
+    //
+    // chatContainer.appendChild(chatbotMessageContainer);
+    // return
   }
 }
 
-async function sendMessageToRasa(message) {
+async function sendMessageToRasa(message, chatContainer) {
   const url = 'http://localhost:5005/webhooks/rest/webhook';//'https://dashboards.create.aau.dk/webhooks/rest/webhook';
   //const url = 'https://dashboards.create.aau.dk/webhooks/rest/webhook';
   const data = {
