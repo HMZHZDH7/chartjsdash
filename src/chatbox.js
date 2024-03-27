@@ -151,8 +151,8 @@ async function sendMessage() {
 //   }
 // }
 
-    //const url = 'http://localhost:5005/webhooks/rest/webhook';//'https://dashboards.create.aau.dk/webhooks/rest/webhook';
-    const url = 'https://dashboards.create.aau.dk/webhooks/rest/webhook';
+    const url = 'http://localhost:5005/webhooks/rest/webhook';//'https://dashboards.create.aau.dk/webhooks/rest/webhook';
+    //const url = 'https://dashboards.create.aau.dk/webhooks/rest/webhook';
     const data = {
       message: message
     };
