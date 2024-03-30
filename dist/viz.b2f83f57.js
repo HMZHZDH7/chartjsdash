@@ -596,7 +596,7 @@ var _autoDefault = parcelHelpers.interopDefault(_auto);
 //import data from './data.json'
 // visualization.js
 var allChartsThatWeHaveSaved = [];
-async function createLineChart() {
+async function createLineChart(log) {
     // Extracting YQ and Value from the JSON data
     let data;
     let args;
@@ -617,6 +617,51 @@ async function createLineChart() {
     }
     const labels = data.map((item)=>item.YQ);
     const values = data.map((item)=>item.Value);
+    const chartData = {
+        labels: labels,
+        datasets: [
+            {
+                label: "Timeline Chartsss",
+                data: values,
+                borderColor: "#ff4081",
+                borderWidth: 2,
+                pointRadius: 5,
+                pointBackgroundColor: "#ff4081"
+            }
+        ]
+    };
+    console.log(args.visualization.show_nat_val === true);
+    if (args.visualization.show_nat_val === true) {
+        const nat_values = data.map((item)=>item.nat_value);
+        chartData.datasets.push({
+            label: "Nat Values",
+            data: nat_values,
+            borderColor: "#2196f3",
+            borderWidth: 2,
+            pointRadius: 5,
+            pointBackgroundColor: "#2196f3"
+        });
+    }
+    if (log === true) {
+        const logger = "http://localhost:5000/log_manager";
+        //const logger = 'https://dashboards.create.aau.dk/log_manager'
+        const data_to_log = {
+            message: "rando",
+            type: "data"
+        };
+        fetch(logger, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data_to_log)
+        }).then((response)=>{
+            if (!response.ok) throw new Error("Failed to post message.");
+            console.log("Message posted successfully.");
+        }).catch((error)=>{
+            console.error("Error posting message:", error);
+        });
+    }
     setupXYFiltering(labels, values);
     // Creating a line chart
     const ctx = document.getElementById("viz");
@@ -626,19 +671,7 @@ async function createLineChart() {
     if (chartStatus !== undefined) chartStatus.destroy();
     const chart = new (0, _autoDefault.default)(ctx, {
         type: args.visualization.type,
-        data: {
-            labels: labels,
-            datasets: [
-                {
-                    label: "Timeline Chartsss",
-                    data: values,
-                    borderColor: "#ff4081",
-                    borderWidth: 2,
-                    pointRadius: 5,
-                    pointBackgroundColor: "#ff4081"
-                }
-            ]
-        },
+        data: chartData,
         options: {
             scales: {
                 x: {
@@ -736,7 +769,7 @@ const setupXYFiltering = (x, y)=>{
     }
 };
 // Fetch data from data.json and create the chart
-createLineChart().then((r)=>console.log("Chart created"));
+createLineChart(false).then((r)=>console.log("Chart created"));
 
 },{"./chatbox.js":"7LLTF","chart.js/auto":"d8NN9","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"d8NN9":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");

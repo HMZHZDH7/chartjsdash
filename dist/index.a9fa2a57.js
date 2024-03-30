@@ -750,9 +750,27 @@ async function sendMessage() {
 async function sendMessageToRasa(message, chatContainer) {
     const url = "http://localhost:5005/webhooks/rest/webhook"; //'https://dashboards.create.aau.dk/webhooks/rest/webhook';
     //const url = 'https://dashboards.create.aau.dk/webhooks/rest/webhook';
+    const logger = "http://localhost:5000/log_manager";
+    //const logger = 'https://dashboards.create.aau.dk/log_manager'
     const data = {
         message: message
     };
+    const data_to_log = {
+        message: message,
+        type: "user"
+    };
+    fetch(logger, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data_to_log)
+    }).then((response)=>{
+        if (!response.ok) throw new Error("Failed to post message.");
+        console.log("Message posted successfully.");
+    }).catch((error)=>{
+        console.error("Error posting message:", error);
+    });
     try {
         const response = await fetch(url, {
             method: "POST",
@@ -772,13 +790,29 @@ async function sendMessageToRasa(message, chatContainer) {
             botMessage.classList.add("received-message");
             botMessage.textContent = message.text;
             chatContainer.appendChild(botMessage);
+            const data_to_log = {
+                message: botMessage.textContent,
+                type: "bot"
+            };
+            fetch(logger, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data_to_log)
+            }).then((response)=>{
+                if (!response.ok) throw new Error("Failed to post message.");
+                console.log("Message posted successfully.");
+            }).catch((error)=>{
+                console.error("Error posting message:", error);
+            });
         });
     } catch (error) {
         console.error("Error:", error);
     // Handle the error as needed, e.g., show an error message to the user
     }
     require("2d773bba916997e6").then(function(viz) {
-        viz.createLineChart();
+        viz.createLineChart(true);
     });
     //hide the img #overlay and remove class hidden from #viz
     const overlay = document.getElementById("overlay");
