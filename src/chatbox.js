@@ -127,12 +127,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   // Your code here
   // create an array of all images
   const chartLibrary = [
-    "./public/chart1.png",
-    "./public/chart2.png",
-    "./public/chart1.png",
-    "./public/chart2.png",
-    "./public/chart1.png",
-    "./public/chart2.png",
+
   ];
 
   const galleryContainer = document.getElementById("gallery-container");
