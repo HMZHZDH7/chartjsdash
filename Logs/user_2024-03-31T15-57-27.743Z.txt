@@ -1,0 +1,37 @@
+[2024-03-31T15:57:27.744Z] USER: hi
+[2024-03-31T15:57:44.337Z] USER: predictors
+[2024-03-31T15:57:48.561Z] BOT: OK! I will create a line plot.
+[2024-03-31T15:57:48.563Z] BOT: <Response [200]>
+[2024-03-31T15:57:48.564Z] BOT: OK! I will create a door_to_needle plot.
+[2024-03-31T15:57:48.564Z] BOT: <Response [200]>
+[2024-03-31T15:57:57.007Z] USER: t-test
+[2024-03-31T15:57:59.154Z] BOT: Comparing 2022 Q2 to 2022 Q1, the p-value of the wilcoxon test is 0.0743, Cohen's d is 0.1761.
+[2024-03-31T15:58:05.203Z] USER: predictors
+[2024-03-31T15:58:09.467Z] BOT: OK! I will create a line plot.
+[2024-03-31T15:58:09.468Z] BOT: <Response [200]>
+[2024-03-31T15:58:09.469Z] BOT: <Response [200]>
+[2024-03-31T15:58:09.470Z] BOT: OK! I will create a door_to_needle plot.
+[2024-03-31T15:58:22.056Z] USER: What can predict this?
+[2024-03-31T15:58:24.403Z] BOT: Root Mean Squared Error: 7.08
+[2024-03-31T15:58:24.404Z] BOT: Feature Importances:
+[2024-03-31T15:58:24.407Z] BOT: On average, prenotification increases your door_to_needle by: 5.37
+[2024-03-31T15:58:24.409Z] BOT: On average, covid_test increases your door_to_needle by: 5.02
+[2024-03-31T15:58:24.409Z] BOT: On average, sys_blood_pressure increases your door_to_needle by: 4.05
+[2024-03-31T15:58:24.410Z] BOT: On average, dis_blood_pressure increases your door_to_needle by: 2.53
+[2024-03-31T15:58:24.410Z] BOT: On average, glucose increases your door_to_needle by: 3.97
+[2024-03-31T15:58:24.411Z] BOT: On average, door_to_imaging increases your door_to_needle by: 1.92
+[2024-03-31T15:58:24.411Z] BOT: On average, nihss_score increases your door_to_needle by: 1.24
+[2024-03-31T15:58:24.415Z] BOT: On average, risk_diabetes increases your door_to_needle by: 0.55
+[2024-03-31T15:58:24.415Z] BOT: On average, prestroke_mrs increases your door_to_needle by: 0.39
+[2024-03-31T15:58:24.416Z] BOT: On average, risk_smoker increases your door_to_needle by: 0.26
+[2024-03-31T15:58:58.224Z] USER: thrombolysis
+[2024-03-31T15:59:02.439Z] BOT: OK! I will create a line plot.
+[2024-03-31T15:59:02.441Z] BOT: <Response [200]>
+[2024-03-31T15:59:02.442Z] BOT: OK! I will create a thrombolysis plot.
+[2024-03-31T15:59:02.442Z] BOT: <Response [200]>
+[2024-03-31T15:59:29.082Z] USER: covid_test
+[2024-03-31T15:59:31.255Z] BOT: Comparing 2022 Q2 to 2022 Q1, the p-value of the wilcoxon test is 0.5994, Cohen's d is -0.0581.
+[2024-03-31T15:59:37.771Z] USER: covid
+[2024-03-31T15:59:41.982Z] BOT: OK! I will create a line plot.
+[2024-03-31T15:59:41.984Z] BOT: <Response [200]>
+[2024-03-31T15:59:41.984Z] BOT: Sorry, I can only create age/gender/hospital_stroke/hospitalized_in/department_type/stroke_type/nihss_score/thrombolysis/no_thrombolysis_reason/door_to_needle/door_to_imaging/onset_to_door/imaging_done/imaging_type/dysphagia_screening_type/before_onset_antidiabetics/before_onset_cilostazol/before_onset_clopidrogel/before_onset_ticagrelor/before_onset_ticlopidine/before_onset_prasugrel/before_onset_dipyridamol/before_onset_warfarin/risk_hypertension/risk_diabetes/risk_hyperlipidemia/risk_congestive_heart_failure/risk_smoker/risk_previous_ischemic_stroke/risk_previous_hemorrhagic_stroke/risk_coronary_artery_disease_or_myocardial_infarction/risk_hiv/bleeding_source/discharge_mrs/discharge_nihss_score/three_m_mrs/covid_test/physiotherapy_start_within_3days/occup_physiotherapy_received/glucose/cholesterol/sys_blood_pressure/dis_blood_pressure/perfusion_core/hypoperfusion_core/stroke_mimics_diagnosis/prestroke_mrs/tici_score/prenotification/ich_score/hunt_hess_score plots.
