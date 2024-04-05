@@ -37,7 +37,7 @@ export async function createLineChart(log) {
   const chartData = {
     labels: labels,
     datasets: [{
-      label: 'Timeline Chartsss',
+      label: 'Your hospital',
       data: values,
       borderColor: '#ff4081',
       borderWidth: 2,
@@ -51,7 +51,7 @@ export async function createLineChart(log) {
     const nat_values = data.map(item => item.nat_value);
 
     chartData.datasets.push({
-      label: 'Nat Values',
+      label: 'National median',
       data: nat_values,
       borderColor: '#2196f3', // You can set your desired color
       borderWidth: 2,
@@ -61,8 +61,8 @@ export async function createLineChart(log) {
   }
 
   if (log === true) {
-    //const logger = 'http://localhost:5000/log_manager'
-    const logger = 'https://dashboards.create.aau.dk/log_manager'
+    const logger = 'http://localhost:5000/log_manager'
+    //const logger = 'https://dashboards.create.aau.dk/log_manager'
 
     const data_to_log = {
       message: "rando",
@@ -148,8 +148,8 @@ async function saveChartAsPng(chart) {
 }
 
 async function fetchData(filename) {
-  //return fetch('http://localhost:4000/data-webhook', {
-  return fetch('https://dashboards.create.aau.dk/data-webhook', {
+  return fetch('http://localhost:4000/data-webhook', {
+  //return fetch('https://dashboards.create.aau.dk/data-webhook', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -216,4 +216,4 @@ const setupXYFiltering = (x, y) => {
 }
 
 // Fetch data from data.json and create the chart
-createLineChart(false).then(r => console.log("Chart created"))
+//createLineChart(false).then(r => console.log("Chart created"))
