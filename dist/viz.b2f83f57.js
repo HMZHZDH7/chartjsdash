@@ -735,7 +735,7 @@ const setupXYFiltering = (x, y)=>{
 // Fetch data from data.json and create the chart
 createLineChart().then((r)=>console.log("Chart created"));
 
-},{"chart.js/auto":"d8NN9","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./chatbox.js":"7LLTF"}],"d8NN9":[function(require,module,exports) {
+},{"./chatbox.js":"7LLTF","chart.js/auto":"d8NN9","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"d8NN9":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _chartJs = require("../dist/chart.js");
