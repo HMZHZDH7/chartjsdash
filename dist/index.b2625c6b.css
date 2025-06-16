@@ -183,7 +183,7 @@ body {
   font: inherit;
   cursor: pointer;
   outline: inherit;
-  background: #fde1e8;
+  background: #1c5782;
   border: none;
   border-radius: 8px;
   min-width: 50px;
@@ -194,7 +194,7 @@ body {
 
 #send:hover {
   color: #fff;
-  background: #f9d0da;
+  background: #8fb8e6;
   transition: all .3s;
 }
 
@@ -217,17 +217,17 @@ body {
 }
 
 .messenger-id {
-  color: #000;
-  background-color: #fde1e8;
+  color: #f9f9f9;
+  background-color: #1c5782;
   border-radius: 8px 8px 0 0;
   padding: 2px 8px 0;
   font-weight: 700;
 }
 
 .user-message {
-  color: #000;
+  color: #f9f9f9;
   text-align: right;
-  background-color: #fde1e8;
+  background-color: #1c5782;
   border-radius: 8px 0 8px 8px;
   min-width: 30%;
   max-width: 80%;
@@ -255,7 +255,7 @@ body {
 }
 
 #viz-container {
-  background-color: #fff;
+  background-color: #f9f9f9;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
@@ -266,6 +266,7 @@ body {
 
 #title {
   text-align: left;
+  color: #1c5782;
   width: 100%;
   height: auto;
   padding-top: 20px;
@@ -282,7 +283,7 @@ body {
 }
 
 #gallery {
-  background: #fde1e8;
+  background: #1c5782;
   flex-direction: row;
   flex-shrink: 0;
   justify-content: flex-start;
@@ -377,7 +378,7 @@ body {
 }
 
 .thumbnail-selected {
-  border: 2px solid #e2476e;
+  border: 2px solid #d7e7ff;
 }
 
 .hidden {

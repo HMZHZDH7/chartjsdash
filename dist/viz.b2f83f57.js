@@ -615,36 +615,46 @@ async function createLineChart(log) {
     } catch (error) {
         console.log(error);
     }
-    const labels = data.map((item)=>item.YQ);
-    const values = data.map((item)=>item.Value);
+    let labels = [];
+    let values = [];
+    console.log(Array.isArray(data));
+    if (Array.isArray(data)) {
+        // timeline case
+        labels = data.map((item)=>item.YQ);
+        values = data.map((item)=>item.Value);
+    } else if (typeof data === "object") {
+        // SHAP case
+        labels = Object.keys(data);
+        values = Object.values(data);
+    } else console.error("Unrecognized data format:", data);
     const chartData = {
         labels: labels,
         datasets: [
             {
                 label: "Your hospital",
                 data: values,
-                borderColor: "#ff4081",
+                borderColor: "#3981e0",
                 borderWidth: 2,
                 pointRadius: 5,
-                pointBackgroundColor: "#ff4081"
+                pointBackgroundColor: "#3981e0"
             }
         ]
     };
-    console.log(args.visualization.show_nat_val === true);
-    if (args.visualization.show_nat_val === true) {
+    console.log(args.visualization.show_nat_val === true && args.visualization.type !== "shap");
+    if (args.visualization.show_nat_val === true && args.visualization.type !== "shap") {
         const nat_values = data.map((item)=>item.nat_value);
         chartData.datasets.push({
             label: "National median",
             data: nat_values,
-            borderColor: "#2196f3",
+            borderColor: "#a1ea36",
             borderWidth: 2,
             pointRadius: 5,
-            pointBackgroundColor: "#2196f3"
+            pointBackgroundColor: "#a1ea36"
         });
     }
     if (log === true) {
-        //const logger = 'http://localhost:5000/log_manager'
-        const logger = "https://dashboards.create.aau.dk/log_manager";
+        const logger = "http://localhost:5000/log_manager";
+        //const logger = 'https://dashboards.create.aau.dk/log_manager'
         const data_to_log = {
             message: "rando",
             type: "data"
@@ -669,7 +679,83 @@ async function createLineChart(log) {
     ctx.height = ctx.clientHeight; // Set canvas height to its client height
     let chartStatus = (0, _autoDefault.default).getChart(ctx);
     if (chartStatus !== undefined) chartStatus.destroy();
-    const chart = new (0, _autoDefault.default)(ctx, {
+    let chartConfig;
+    console.log(labels);
+    console.log(values);
+    console.log("labels");
+    console.log(args.visualization.type);
+    if (args.visualization.type === "shap") chartConfig = {
+        type: "bar",
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: "SHAP value",
+                    data: values,
+                    backgroundColor: values.map((val)=>val >= 0 ? "rgba(75, 192, 192, 0.7)" : "rgba(255, 99, 132, 0.7)"),
+                    borderColor: values.map((val)=>val >= 0 ? "rgba(75, 192, 192, 1)" : "rgba(255, 99, 132, 1)"),
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            indexAxis: "y",
+            responsive: true,
+            scales: {
+                x: {
+                    min: -3,
+                    max: 3,
+                    grid: {
+                        drawTicks: false,
+                        color: "rgba(0,0,0,0.1)"
+                    },
+                    ticks: {
+                        stepSize: 1,
+                        beginAtZero: false
+                    },
+                    title: {
+                        display: false
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: "Feature"
+                    },
+                    ticks: {
+                        autoSkip: false
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `${context.label}: ${context.raw.toFixed(3)}`;
+                        }
+                    }
+                },
+                title: {
+                    display: true,
+                    text: "Contribution to three month mRS"
+                }
+            },
+            animation: {
+                onComplete: function() {
+                    let base = chart.toBase64Image();
+                    if (!allChartsThatWeHaveSaved.includes(chart)) {
+                        allChartsThatWeHaveSaved.push(chart);
+                        saveChartAsPng(base);
+                    }
+                }
+            }
+        }
+    };
+    else // Timeline chart
+    chartConfig = {
         type: args.visualization.type,
         data: chartData,
         options: {
@@ -701,7 +787,8 @@ async function createLineChart(log) {
                 }
             }
         }
-    });
+    };
+    const chart = new (0, _autoDefault.default)(ctx, chartConfig);
 }
 async function saveChartAsPng(chart) {
     let img = document.createElement("img");
@@ -713,8 +800,8 @@ async function saveChartAsPng(chart) {
     document.getElementById("gallery-container").appendChild(img);
 }
 async function fetchData(filename) {
-    //return fetch('http://localhost:4000/data-webhook', {
-    return fetch("https://dashboards.create.aau.dk/data-webhook", {
+    return fetch("http://localhost:4000/data-webhook", {
+        //return fetch('https://dashboards.create.aau.dk/data-webhook', {
         method: "POST",
         headers: {
             "Content-Type": "application/json"

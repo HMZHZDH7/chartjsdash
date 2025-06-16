@@ -1,8 +1,10 @@
 // visualization.js
+
 import { showImage } from './chatbox.js'
 // Function to create the line chart
 import Chart from "chart.js/auto";
 //import data from './data.json'
+import Tree from 'react-d3-tree';
 // visualization.js
 var allChartsThatWeHaveSaved = []
 
@@ -30,39 +32,53 @@ export async function createLineChart(log) {
     console.log(error)
   }
 
+  let labels = [];
+  let values = [];
 
-  const labels = data.map(item => item.YQ);
-  const values = data.map(item => item.Value);
+  console.log(Array.isArray(data))
+  if (Array.isArray(data)) {
+    // timeline case
+    labels = data.map(item => item.YQ);
+    values = data.map(item => item.Value);
+  } else if (typeof data === "object") {
+    // SHAP case
+    labels = Object.keys(data);
+    values = Object.values(data);
+  } else {
+    console.error("Unrecognized data format:", data);
+  }
+
 
   const chartData = {
     labels: labels,
     datasets: [{
       label: 'Your hospital',
       data: values,
-      borderColor: '#ff4081',
+      borderColor: '#3981e0',
       borderWidth: 2,
       pointRadius: 5,
-      pointBackgroundColor: '#ff4081',
+      pointBackgroundColor: '#3981e0',
     }]
   };
 
-  console.log(args.visualization.show_nat_val === true)
-  if (args.visualization.show_nat_val === true) {
+  console.log(args.visualization.show_nat_val === true && args.visualization.type !== "shap")
+
+  if (args.visualization.show_nat_val === true && args.visualization.type !== "shap") {
     const nat_values = data.map(item => item.nat_value);
 
     chartData.datasets.push({
       label: 'National median',
       data: nat_values,
-      borderColor: '#2196f3', // You can set your desired color
+      borderColor: '#a1ea36', // You can set your desired color
       borderWidth: 2,
       pointRadius: 5,
-      pointBackgroundColor: '#2196f3', // You can set your desired color
+      pointBackgroundColor: '#a1ea36', // You can set your desired color
     });
   }
 
   if (log === true) {
-    //const logger = 'http://localhost:5000/log_manager'
-    const logger = 'https://dashboards.create.aau.dk/log_manager'
+    const logger = 'http://localhost:5000/log_manager'
+    //const logger = 'https://dashboards.create.aau.dk/log_manager'
 
     const data_to_log = {
       message: "rando",
@@ -99,41 +115,187 @@ export async function createLineChart(log) {
     chartStatus.destroy();
   }
 
-  const chart = new Chart(ctx, {
-    type: args.visualization.type,
-    data: chartData,
-    options: {
-      scales: {
-        x: {
-          type: 'category', // Use category scale for YQ values
-          position: 'bottom',
-          title: {
-            display: true,
-            text: 'YQ'
-          }
-        },
-        y: {
-          title: {
-            display: true,
-            text: 'Value'
-          },
-          beginAtZero: true
-        }
+  let chartConfig;
+
+  console.log(labels)
+  console.log(values)
+  console.log("labels")
+  console.log(args.visualization.type)
+  if (args.visualization.type === 'shap') {
+
+    chartConfig = {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'SHAP value',
+          data: values,
+          backgroundColor: values.map(val => val >= 0 ? 'rgba(75, 192, 192, 0.7)' : 'rgba(255, 99, 132, 0.7)'),
+          borderColor: values.map(val => val >= 0 ? 'rgba(75, 192, 192, 1)' : 'rgba(255, 99, 132, 1)'),
+
+          borderWidth: 1
+        }]
       },
-      animation: {
-        onComplete: function () {
-          let base = chart.toBase64Image();
-          for (let i = 0; i < allChartsThatWeHaveSaved.length; i++) {
-            if (allChartsThatWeHaveSaved[i] === chart) {
-              return;
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        scales: {
+          x: {
+            min: -3,
+            max: 3,
+            grid: {
+              drawTicks: false,
+              color: 'rgba(0,0,0,0.1)'
+            },
+            ticks: {
+              stepSize: 1, // Interval of 0.5 between ticks (adjust as needed)
+              beginAtZero: false, // If you want to make sure it starts at -3 and not at 0
+            },
+            title: {
+              display: false
+            }
+          },
+          y: {
+            title: {
+              display: true,
+              text: 'Feature'
+            },
+            ticks: {
+              autoSkip: false
             }
           }
-          allChartsThatWeHaveSaved.push(chart);
-          saveChartAsPng(base);
+        },
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                return `${context.label}: ${context.raw.toFixed(3)}`;
+              }
+            }
+          },
+          title: {
+            display: true,
+            text: 'Contribution to three month mRS'
+          }
+        },
+        animation: {
+          onComplete: function () {
+            let base = chart.toBase64Image();
+            if (!allChartsThatWeHaveSaved.includes(chart)) {
+              allChartsThatWeHaveSaved.push(chart);
+              saveChartAsPng(base);
+            }
+          }
         }
       }
-    }
-  });
+    };
+  } else if (args.visualization.type === 'tree') {
+      const treeData = [
+        {
+          name: 'age ≤ 65',
+          attributes: { feature: 'age', threshold: 65 },
+          children: [
+            {
+              name: 'leaf: 0.12',
+              attributes: { value: 0.12 },
+            },
+            {
+              name: 'NIHSS ≤ 8',
+              attributes: { feature: 'NIHSS', threshold: 8 },
+              children: [
+                {
+                  name: 'leaf: 0.45',
+                  attributes: { value: 0.45 },
+                },
+                {
+                  name: 'leaf: 0.78',
+                  attributes: { value: 0.78 },
+                },
+              ],
+            },
+          ],
+        },
+      ];
+      return (
+        <div style={{width: '100%', height: '500px'}}>
+          <Tree
+            data={treeData}
+            orientation="vertical"
+            translate={{x: 300, y: 50}}
+            nodeSize={{x: 200, y: 100}}
+            styles={{
+              nodes: {
+                node: {
+                  circle: {
+                    fill: '#e0f7fa',
+                    stroke: '#00796b',
+                    strokeWidth: 2,
+                  },
+                  name: {
+                    fontSize: '14px',
+                    fill: '#004d40',
+                  },
+                  attributes: {
+                    fontSize: '12px',
+                    fill: '#00695c',
+                  },
+                },
+                leafNode: {
+                  circle: {
+                    fill: '#ffe0b2',
+                    stroke: '#e65100',
+                    strokeWidth: 2,
+                  },
+                  name: {
+                    fontSize: '14px',
+                    fill: '#bf360c',
+                  },
+                  attributes: {
+                    fontSize: '12px',
+                    fill: '#e64a19',
+                  },
+                },
+              },
+            }}
+          />
+        </div>
+      );
+  } else {
+    // Timeline chart
+    chartConfig = {
+      type: args.visualization.type,
+      data: chartData,
+      options: {
+        scales: {
+          x: {
+            type: 'category',
+            position: 'bottom',
+            title: {display: true, text: 'YQ'}
+          },
+          y: {
+            title: {display: true, text: 'Value'},
+            beginAtZero: true
+          }
+        },
+        animation: {
+          onComplete: function () {
+            let base = chart.toBase64Image();
+            for (let i = 0; i < allChartsThatWeHaveSaved.length; i++) {
+              if (allChartsThatWeHaveSaved[i] === chart) {
+                return;
+              }
+            }
+            allChartsThatWeHaveSaved.push(chart);
+            saveChartAsPng(base);
+          }
+        }
+      }
+    };
+  }
+  const chart = new Chart(ctx, chartConfig);
 }
 
 
@@ -148,8 +310,8 @@ async function saveChartAsPng(chart) {
 }
 
 async function fetchData(filename) {
-  //return fetch('http://localhost:4000/data-webhook', {
-  return fetch('https://dashboards.create.aau.dk/data-webhook', {
+  return fetch('http://localhost:4000/data-webhook', {
+  //return fetch('https://dashboards.create.aau.dk/data-webhook', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

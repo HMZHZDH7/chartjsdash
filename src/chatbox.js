@@ -199,8 +199,8 @@ async function sendMessage() {
 }
 
 async function sendMessageToRasa(message, chatContainer) {
-  //const url = 'http://localhost:5005/webhooks/rest/webhook';//'https://dashboards.create.aau.dk/webhooks/rest/webhook';
-  const url = 'https://dashboards.create.aau.dk/webhooks/rest/webhook';
+  const url = 'http://localhost:5005/webhooks/rest/webhook';//'https://dashboards.create.aau.dk/webhooks/rest/webhook';
+  //const url = 'https://dashboards.create.aau.dk/webhooks/rest/webhook';
 
   //const logger = 'http://localhost:5000/log_manager'
   const logger = 'https://dashboards.create.aau.dk/log_manager'
